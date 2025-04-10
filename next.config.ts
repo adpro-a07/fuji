@@ -18,4 +18,8 @@ const config: NextConfig = {
   ],
 }
 
+module.exports = {
+  output: "standalone",
+}
+
 export default env.ANALYZE ? withBundleAnalyzer({ enabled: env.ANALYZE })(config) : config
