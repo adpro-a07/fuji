@@ -9,7 +9,8 @@ permissions:
   contents: read # This is required for actions/checkout
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: ap-southeast-1 # used for ECS deployment
+  ECR_REGION: us-east-1 # used for ECR Public login
   ECR_REPOSITORY: adpro-a07-staging/fuji
   REGISTRY_ALIAS: u3l0u1d1
   ECS_SERVICE: fuji-staging-service
@@ -31,7 +32,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::000684258120:role/github-ecr-role
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ env.ECR_REGION }}
 
       - name: Login to Amazon ECR Public
         id: login-ecr-public
@@ -48,6 +49,12 @@ jobs:
           docker build -t $REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Re-configure AWS Credentials for ECS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::000684258120:role/github-ecr-role
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
