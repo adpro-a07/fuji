@@ -1,7 +1,5 @@
-import { NextRequest } from "next/server"
-
-export async function GET(request: NextRequest) {
-  return new Response(JSON.stringify({ status: "ok" }), {
+export async function GET() {
+  return new Response(JSON.stringify({ status: "ok", message: "Health is good!" }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   })
