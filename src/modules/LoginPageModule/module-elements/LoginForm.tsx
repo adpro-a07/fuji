@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { loginFormSchema } from "../constant"
+import Link from "next/link"
 
 export const LoginForm = () => {
   const { login } = useAuthContext()
@@ -70,7 +71,7 @@ export const LoginForm = () => {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
           <Button className="w-full" asChild={true}>
-            <a href="/register">Register</a>
+            <Link href="/register">Register</Link>
           </Button>
         </div>
       </form>
