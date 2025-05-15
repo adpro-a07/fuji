@@ -14,8 +14,8 @@ export const env = createEnv({
   client: {},
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
-    AUTH_REST_URL: process.env.KILIMANJARO_URL,
-    AUTH_GRPC_URL: process.env.KILIMANJARO_GRPC_URL,
-    MAIN_REST_URL: process.env.EVEREST_URL,
+    AUTH_REST_URL: process.env.KILIMANJARO_URL ?? "http://localhost:8090",
+    AUTH_GRPC_URL: process.env.KILIMANJARO_GRPC_URL ?? "http://localhost:9090",
+    MAIN_REST_URL: process.env.EVEREST_URL ?? "http://localhost:8080",
   },
 })
