@@ -21,6 +21,21 @@ function isSafeRelativeUrl(url: string): boolean {
 }
 
 /**
+ * Determines if a response already has the expected StructuredResponse format
+ * by checking for required properties
+ */
+function isStructuredResponse<T>(data: unknown): data is StructuredResponse<T> {
+  return (
+    data !== null &&
+    typeof data === "object" &&
+    "success" in data &&
+    typeof data.success === "boolean" &&
+    "message" in data &&
+    typeof data.message === "string"
+  )
+}
+
+/**
  * Performs a customized fetch request with support for token-based authentication,
  * automatic token refreshing, file uploads, and error handling.
  *
@@ -76,7 +91,7 @@ export async function customFetch<T = CustomFetchBaseResponse>(
     // Handle authorization
     if (isAuthorized) {
       const cookieStore = await cookies()
-      const token = cookieStore.get("osaka-access")
+      const token = cookieStore.get("kilimanjaro-access")
 
       if (token) {
         headers["authorization"] = `Bearer ${token.value}`
@@ -87,7 +102,7 @@ export async function customFetch<T = CustomFetchBaseResponse>(
           if (!_isRetry) {
             await refreshAccessTokenWithQueue()
             // Get the new token after refresh
-            const newToken = cookieStore.get("osaka-access")
+            const newToken = cookieStore.get("kilimanjaro-access")
             if (newToken) {
               headers["authorization"] = `Bearer ${newToken.value}`
             } else {
@@ -150,7 +165,13 @@ export async function customFetch<T = CustomFetchBaseResponse>(
         const contentType = response.headers.get("content-type")
         if (contentType?.includes("application/json")) {
           const errorBody = await response.json()
-          // Type guard to handle the unknown type
+
+          // Check if error response is already in StructuredResponse format
+          if (isStructuredResponse(errorBody)) {
+            return errorBody as StructuredResponse<T>
+          }
+
+          // Otherwise, extract error details
           if (errorBody && typeof errorBody === "object") {
             errorDetail = (
               "detail" in errorBody
@@ -192,21 +213,38 @@ export async function customFetch<T = CustomFetchBaseResponse>(
 
     // Process successful response based on content type
     const contentType = response.headers.get("content-type")
-    let data: T
 
     if (contentType?.includes("application/json")) {
-      data = (await response.json()) as T
-    } else if (contentType?.includes("text/")) {
-      data = (await response.text()) as unknown as T
-    } else {
-      data = (await response.blob()) as unknown as T
-    }
+      const jsonData = await response.json()
 
-    return {
-      success: true,
-      message: "Request completed successfully",
-      data,
-      status: response.status,
+      // If the response is already in the StructuredResponse format, return it directly
+      if (isStructuredResponse<T>(jsonData)) {
+        return jsonData as StructuredResponse<T>
+      }
+
+      // Otherwise, wrap it in a StructuredResponse
+      return {
+        success: true,
+        message: "Request completed successfully",
+        data: jsonData as T,
+        status: response.status,
+      }
+    } else if (contentType?.includes("text/")) {
+      const textData = await response.text()
+      return {
+        success: true,
+        message: "Request completed successfully",
+        data: textData as unknown as T,
+        status: response.status,
+      }
+    } else {
+      const blobData = await response.blob()
+      return {
+        success: true,
+        message: "Request completed successfully",
+        data: blobData as unknown as T,
+        status: response.status,
+      }
     }
   } catch (error) {
     // Handle different error types
@@ -246,12 +284,7 @@ function isTokenNearExpiration(token: string, thresholdSeconds = 60): boolean {
     if (!base64Url) return false
 
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/")
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
-        .join("")
-    )
+    const jsonPayload = Buffer.from(base64, "base64").toString("utf-8")
 
     const payload = JSON.parse(jsonPayload) as { exp?: number }
 
@@ -297,7 +330,7 @@ async function refreshAccessTokenWithQueue(): Promise<boolean> {
 async function refreshAccessToken(): Promise<boolean> {
   try {
     const cookieStore = await cookies()
-    const refreshToken = cookieStore.get("osaka-refresh")
+    const refreshToken = cookieStore.get("kilimanjaro-refresh")
 
     if (!refreshToken) {
       return false
@@ -316,99 +349,9 @@ async function refreshAccessToken(): Promise<boolean> {
     }
 
     const tokens = (await response.json()) as RefreshTokenResponse
-    cookieStore.set("osaka-access", tokens.access)
+    cookieStore.set("kilimanjaro-access", tokens.access)
     return true
   } catch {
     return false
   }
-}
-
-/**
- * Sends a GET request using `customFetch`.
- *
- * WARNING: This function internally uses `customFetch`, which must only be run
- * from Next.js Server Components or invoked through a Client Component's form `action` attribute.
- *
- * @template T - The expected type of the response data.
- * @param url - The endpoint URL.
- * @param options - Optional fetch configuration.
- * @returns A `StructuredResponse` containing the result of the GET request.
- */
-export const get = async <T = CustomFetchBaseResponse>(
-  url: string,
-  options?: CustomFetchRequestInit
-): Promise<StructuredResponse<T>> => {
-  return customFetch<T>(url, { ...options, method: "GET" })
-}
-
-/**
- * Sends a POST request using `customFetch`, with support for JSON and file uploads.
- *
- * WARNING: This function internally uses `customFetch`, which must only be run
- * from Next.js Server Components or invoked through a Client Component's form `action` attribute.
- *
- * @template T - The expected type of the response data.
- * @template D - The type of the data to be sent in the request body.
- * @param url - The endpoint URL.
- * @param data - Optional payload to send in the request body.
- * @param options - Optional fetch configuration.
- * @returns A `StructuredResponse` containing the result of the POST request.
- */
-export const post = async <T = CustomFetchBaseResponse, D = unknown>(
-  url: string,
-  data?: D,
-  options?: CustomFetchRequestInit
-): Promise<StructuredResponse<T>> => {
-  const isUpload = options?.uploadFile ?? false
-
-  return customFetch<T>(url, {
-    ...options,
-    method: "POST",
-    body: data ? (isUpload ? (data as BodyInit) : JSON.stringify(data)) : undefined,
-  })
-}
-
-/**
- * Sends a PUT request using `customFetch`, with support for JSON and file uploads.
- *
- * WARNING: This function internally uses `customFetch`, which must only be run
- * from Next.js Server Components or invoked through a Client Component's form `action` attribute.
- *
- * @template T - The expected type of the response data.
- * @template D - The type of the data to be sent in the request body.
- * @param url - The endpoint URL.
- * @param data - Optional payload to send in the request body.
- * @param options - Optional fetch configuration.
- * @returns A `StructuredResponse` containing the result of the PUT request.
- */
-export const put = async <T = CustomFetchBaseResponse, D = unknown>(
-  url: string,
-  data?: D,
-  options?: CustomFetchRequestInit
-): Promise<StructuredResponse<T>> => {
-  const isUpload = options?.uploadFile ?? false
-
-  return customFetch<T>(url, {
-    ...options,
-    method: "PUT",
-    body: data ? (isUpload ? (data as BodyInit) : JSON.stringify(data)) : undefined,
-  })
-}
-
-/**
- * Sends a DELETE request using `customFetch`.
- *
- * WARNING: This function internally uses `customFetch`, which must only be run
- * from Next.js Server Components or invoked through a Client Component's form `action` attribute.
- *
- * @template T - The expected type of the response data.
- * @param url - The endpoint URL.
- * @param options - Optional fetch configuration.
- * @returns A `StructuredResponse` containing the result of the DELETE request.
- */
-export const del = async <T = CustomFetchBaseResponse>(
-  url: string,
-  options?: CustomFetchRequestInit
-): Promise<StructuredResponse<T>> => {
-  return customFetch<T>(url, { ...options, method: "DELETE" })
 }

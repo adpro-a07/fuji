@@ -36,6 +36,7 @@ export interface CustomFetchBaseResponse {
 export type StructuredResponse<T> = {
   success: boolean
   message: string
+  timestamp?: string
   data?: T
   status?: number
   detail?: unknown
