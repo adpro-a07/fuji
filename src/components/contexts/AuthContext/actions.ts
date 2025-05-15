@@ -12,8 +12,6 @@ export const loginAction = async (values: z.infer<typeof loginFormSchema>) => {
     toAuthBackend: true,
   })
 
-  console.log(response)
-
   if (!response.data || !response.success) {
     return response
   }
