@@ -7,9 +7,9 @@ import { StructuredResponse } from "@/components/utils/customFetch/interface"
 
 // Create enum for user role
 export enum UserRole {
-  ADMIN,
-  TECHNICIAN,
-  CUSTOMER,
+  ADMIN = "ADMIN",
+  TECHNICIAN = "TECHNICIAN",
+  CUSTOMER = "CUSTOMER",
 }
 
 export interface User {

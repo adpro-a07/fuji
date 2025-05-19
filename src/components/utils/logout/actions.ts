@@ -6,8 +6,8 @@ import { redirect } from "next/navigation"
 export const logoutAction = async () => {
   const cookieStore = await cookies()
 
-  cookieStore.delete("osaka-access")
-  cookieStore.delete("osaka-refresh")
+  cookieStore.delete("kilimanjaro-access")
+  cookieStore.delete("kilimanjaro-refresh")
 
   redirect("/login")
 }

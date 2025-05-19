@@ -6,13 +6,13 @@ import { UserRole } from "@/components/contexts/AuthContext/interface"
 export function convertGrpcRoleToUserRole(grpcRole: GrpcUserRole): UserRole {
   // Handle string values
   if (grpcRole === "ADMIN" || grpcRole === 1) {
-    return "ADMIN" as unknown as UserRole.ADMIN
+    return UserRole.ADMIN
   } else if (grpcRole === "TECHNICIAN" || grpcRole === 2) {
-    return "TECHNICIAN" as unknown as UserRole.TECHNICIAN
+    return UserRole.TECHNICIAN
   } else if (grpcRole === "CUSTOMER" || grpcRole === 3) {
-    return "CUSTOMER" as unknown as UserRole.CUSTOMER
+    return UserRole.CUSTOMER
   } else {
-    return "CUSTOMER" as unknown as UserRole.CUSTOMER
+    return UserRole.CUSTOMER
   }
 }
 

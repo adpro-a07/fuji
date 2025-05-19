@@ -16,8 +16,6 @@ const noto_sans_mono = Noto_Sans_Mono({
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const grpcUserData = await useUserServer()
 
-  console.log(grpcUserData)
-
   const user: User | null =
     grpcUserData && grpcUserData.identity && grpcUserData.profile
       ? {
@@ -34,8 +32,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           updatedAt: convertTimestampToString(grpcUserData.identity.updatedAt!),
         }
       : null
-
-  console.log(user)
 
   return (
     <html lang="en" className={noto_sans_mono.className}>

@@ -26,7 +26,6 @@ export const CustomerRegistrationForm = () => {
   const router = useRouter()
 
   const onSubmit: () => void = form.handleSubmit(async (values: z.infer<typeof registrationFormSchema>) => {
-    console.log(values)
     toast.promise(
       (async () => {
         const result = await post("/api/v1/auth/register", values, {
