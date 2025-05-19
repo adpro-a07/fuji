@@ -20,13 +20,13 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
   async function login(values: z.infer<typeof loginFormSchema>) {
     const response = await loginAction(values)
 
-    if (response.success) {
+    if (response.success && response.data) {
       setIsAuthenticated(true)
       setStoredUser(response.data?.user)
       router.push("/")
       return response
     } else {
-      setStoredUser(undefined)
+      setStoredUser(null)
       setIsAuthenticated(false)
       throw new Error(response.message)
     }

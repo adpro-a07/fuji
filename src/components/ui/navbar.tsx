@@ -39,7 +39,7 @@ function NavbarContent() {
         loading: "Logging out...",
         success: () => {
           setIsAuthenticated(false)
-          setStoredUser(undefined)
+          setStoredUser(null)
           return "Successfully logged out!"
         },
         error: () => {

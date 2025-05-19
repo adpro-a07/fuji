@@ -8,8 +8,8 @@ import { StructuredResponse } from "@/components/utils/customFetch/interface"
 // Create enum for user role
 export enum UserRole {
   ADMIN,
-  CUSTOMER,
   TECHNICIAN,
+  CUSTOMER,
 }
 
 export interface User {
@@ -34,13 +34,13 @@ export interface LoginResponse {
 
 export interface AuthContextProviderProps {
   children: ReactNode
-  user: User | undefined
+  user: User | null
 }
 
 export interface AuthContextInterface {
-  user: User | undefined
+  user: User | null
   isAuthenticated: boolean
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
-  setStoredUser: React.Dispatch<React.SetStateAction<User | undefined>>
+  setStoredUser: React.Dispatch<React.SetStateAction<User | null>>
   login: (values: z.infer<typeof loginFormSchema>) => Promise<StructuredResponse<LoginResponse>>
 }
