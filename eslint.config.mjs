@@ -17,6 +17,7 @@ const eslintIgnore = [
   "*.min.js",
   "*.config.js",
   "*.d.ts",
+  "src/proto/",
 ]
 
 const config = typescriptEslint.config(

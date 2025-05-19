@@ -21,6 +21,14 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+ARG KILIMANJARO_URL
+ARG KILIMANJARO_GRPC_URL
+ARG EVEREST_URL
+ENV KILIMANJARO_URL=$KILIMANJARO_URL
+ENV KILIMANJARO_GRPC_URL=$KILIMANJARO_GRPC_URL
+ENV EVEREST_URL=$EVEREST_URL
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
