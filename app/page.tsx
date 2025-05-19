@@ -1,5 +1,5 @@
-import LandingPageModule from "@/modules/LandingPageModule"
 import { Metadata } from "next"
+import LandingPageModule from "@/modules/LandingPageModule"
 
 export const metadata: Metadata = {
   title: "Next.js Enterprise Boilerplate",

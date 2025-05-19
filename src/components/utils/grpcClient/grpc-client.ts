@@ -1,6 +1,6 @@
-import { ProtoGrpcType } from "@/proto/generated/auth"
 import * as grpc from "@grpc/grpc-js"
 import * as protoLoader from "@grpc/proto-loader"
+import { ProtoGrpcType } from "@/proto/generated/auth"
 
 const PROTO_PATH = "./public/assets/proto/auth.proto"
 

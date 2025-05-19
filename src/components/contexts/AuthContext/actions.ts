@@ -2,10 +2,10 @@
 
 import { cookies } from "next/headers"
 import { z } from "zod"
+import { StructuredResponse } from "@/components/utils/customFetch/interface"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { loginFormSchema } from "@/modules/LoginPageModule/constant"
 import { LoginResponse } from "./interface"
-import { StructuredResponse } from "@/components/utils/customFetch/interface"
 
 export const loginAction = async (values: z.infer<typeof loginFormSchema>) => {
   const response = await post<LoginResponse>("/api/v1/auth/login", values, {

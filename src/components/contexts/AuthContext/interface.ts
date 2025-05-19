@@ -2,8 +2,8 @@ import { ReactNode } from "react"
 import { z } from "zod"
 import { UUID } from "crypto"
 
-import { loginFormSchema } from "@/modules/LoginPageModule/constant"
 import { StructuredResponse } from "@/components/utils/customFetch/interface"
+import { loginFormSchema } from "@/modules/LoginPageModule/constant"
 
 // Create enum for user role
 export enum UserRole {

@@ -1,12 +1,12 @@
+import { Noto_Sans_Mono } from "next/font/google"
+import { UUID } from "crypto"
 import { AuthContextProvider } from "@/components/contexts/AuthContext"
+import { User } from "@/components/contexts/AuthContext/interface"
+import useUserServer from "@/components/hooks/useUserServer"
 import Navbar from "@/components/ui/navbar"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import "styles/tailwind.css"
-import { Noto_Sans_Mono } from "next/font/google"
-import useUserServer from "@/components/hooks/useUserServer"
-import { User } from "@/components/contexts/AuthContext/interface"
-import { UUID } from "crypto"
 import { convertGrpcRoleToUserRole, convertTimestampToString } from "@/components/utils/grpcConverter"
 
 const noto_sans_mono = Noto_Sans_Mono({

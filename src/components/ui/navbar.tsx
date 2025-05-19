@@ -31,7 +31,9 @@ function NavbarContent() {
       (async () => {
         try {
           await logoutAction()
-        } catch (error) {}
+        } catch (error) {
+          console.log(error)
+        }
       })(),
       {
         loading: "Logging out...",

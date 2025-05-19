@@ -1,8 +1,8 @@
-import { env } from "env.mjs"
-import { AuthService } from "./grpc-client"
-import { promisify } from "util"
 import * as grpc from "@grpc/grpc-js"
 import { UUID } from "crypto"
+import { promisify } from "util"
+import { env } from "env.mjs"
+import { AuthService } from "./grpc-client"
 
 const target = env.AUTH_GRPC_URL
 

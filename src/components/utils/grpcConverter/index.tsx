@@ -1,6 +1,6 @@
-import { UserRole as GrpcUserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
-import { Timestamp, Timestamp__Output } from "@/proto/generated/google/protobuf/Timestamp"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
+import { Timestamp, Timestamp__Output } from "@/proto/generated/google/protobuf/Timestamp"
+import { UserRole as GrpcUserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
 // Conversion function
 export function convertGrpcRoleToUserRole(grpcRole: GrpcUserRole): UserRole {
