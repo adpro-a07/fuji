@@ -1,5 +1,5 @@
-import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserData"
 import { UUID } from "crypto"
+import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserData"
 
 export enum RepairOrderStatusEnum {
   PENDING_CONFIRMATION = "PENDING_CONFIRMATION",
