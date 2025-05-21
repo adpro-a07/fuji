@@ -1,7 +1,7 @@
 import * as grpc from "@grpc/grpc-js"
 import * as protoLoader from "@grpc/proto-loader"
-import { GRPC_CONFIG } from "./config"
 import { ProtoGrpcType } from "@/proto/generated/auth"
+import { GRPC_CONFIG } from "./config"
 
 // Singleton pattern to maintain a single instance of loaded proto definitions
 class ProtoLoader {
@@ -28,3 +28,4 @@ class ProtoLoader {
 // Get service definitions
 const authPackage = ProtoLoader.getAuthPackage()
 export const AuthServiceDefinition = authPackage.id.ac.ui.cs.advprog.kilimanjaro.auth.AuthService
+export const UserServiceDefinition = authPackage.id.ac.ui.cs.advprog.kilimanjaro.auth.UserService
