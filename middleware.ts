@@ -5,7 +5,9 @@ import { UserRole } from "@/components/contexts/AuthContext/interface"
 import { AuthClient } from "@/lib/grpc"
 
 // Central RBAC config with static and dynamic paths
-const routePermissions: Record<string, UserRole[]> = {}
+const routePermissions: Record<string, UserRole[]> = {
+  "/repair-orders": [UserRole.CUSTOMER],
+}
 
 // Logger utility with readable timestamps and request IDs
 class MiddlewareLogger {
