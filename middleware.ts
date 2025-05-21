@@ -208,6 +208,58 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (refreshToken) {
+    logger.info("Attempting token refresh")
+
+    try {
+      const refreshStartTime = performance.now()
+
+      const authClient = AuthClient.getInstance()
+      const { data, error } = await authClient.refreshToken(refreshToken)
+
+      const refreshDuration = performance.now() - refreshStartTime
+
+      if (!error && data) {
+        logger.debug("Token refresh successful", {
+          duration: logger.formatDuration(refreshDuration),
+          status: data.status,
+        })
+
+        logger.info("Refreshed token role authorized", {
+          allowedRoles,
+          redirectingWithRefresh: true,
+        })
+
+        const url = new URL(request.url)
+        url.searchParams.set("_refresh", "true")
+        const response = NextResponse.redirect(url)
+
+        response.cookies.set("kilimanjaro-access", data.accessToken!, {
+          path: "/",
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+        })
+
+        response.cookies.set("kilimanjaro-refresh", data.refreshToken!, {
+          path: "/",
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+        })
+
+        return response
+      } else {
+        logger.warn("Token refresh failed", {
+          status: data?.status,
+          duration: logger.formatDuration(refreshDuration),
+        })
+      }
+    } catch (error) {
+      logger.error("Token refresh error", error)
+    }
+  }
+
   logger.info("Authentication failed, redirecting to login", {
     redirectTo: "/login",
     callbackUrl: request.url,
