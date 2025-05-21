@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { AuthClientService } from "@/components/utils/grpcClient/grpc-service"
 import { convertGrpcRoleToUserRole } from "@/components/utils/grpcConverter"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
+import { AuthClient } from "@/lib/grpc"
 
 // Central RBAC config with static and dynamic paths
 const routePermissions: Record<string, UserRole[]> = {}
@@ -129,8 +129,6 @@ class MiddlewareLogger {
   }
 }
 
-const authService = new AuthClientService()
-
 function normalizePath(path: string): string {
   path = path.split("?")[0]?.replace(/\/$/, "") as string
 
@@ -174,17 +172,18 @@ export async function middleware(request: NextRequest) {
     try {
       const verifyStartTime = performance.now()
 
-      const verifyRes = await authService.callValidateToken(accessToken)
+      const authClient = AuthClient.getInstance()
+      const { data, error } = await authClient.validateToken(accessToken)
 
       const verifyDuration = performance.now() - verifyStartTime
 
-      if (verifyRes.client?.valid) {
-        const role = convertGrpcRoleToUserRole(verifyRes.client.userData?.identity?.role!)
+      if (!error && data && data.userData) {
+        const role = convertGrpcRoleToUserRole(data.userData?.identity?.role!)
 
         logger.debug("Access token verification successful", {
           role,
           duration: logger.formatDuration(verifyDuration),
-          status: verifyRes.client.status,
+          status: data.status,
         })
 
         if (role && allowedRoles.includes(role)) {
@@ -200,7 +199,7 @@ export async function middleware(request: NextRequest) {
         }
       } else {
         logger.warn("Access token verification failed", {
-          status: verifyRes.client?.status,
+          status: data?.status,
           duration: logger.formatDuration(verifyDuration),
         })
       }
