@@ -7,6 +7,7 @@ import { AuthClient } from "@/lib/grpc"
 // Central RBAC config with static and dynamic paths
 const routePermissions: Record<string, UserRole[]> = {
   "/repair-orders": [UserRole.CUSTOMER],
+  "/repair-orders/create": [UserRole.CUSTOMER],
 }
 
 // Logger utility with readable timestamps and request IDs
