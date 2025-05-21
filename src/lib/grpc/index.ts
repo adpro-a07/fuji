@@ -1,2 +1,2 @@
-export { AuthClient, GrpcError, type AuthServiceResponse } from "./auth-service"
+export { AuthClient, GrpcError, type ServiceResponse } from "./auth-service"
 export { GRPC_CONFIG } from "./config"
