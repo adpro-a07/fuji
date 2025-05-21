@@ -2,7 +2,7 @@ import * as grpc from "@grpc/grpc-js"
 import * as protoLoader from "@grpc/proto-loader"
 import { ProtoGrpcType } from "@/proto/generated/auth"
 
-const PROTO_PATH = "./public/assets/proto/auth.proto"
+const PROTO_PATH = "./proto/auth.proto"
 
 // suggested options for similarity to loading grpc.load behavior
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
