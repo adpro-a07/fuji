@@ -12,20 +12,12 @@ import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
-import { createError, ErrorType, useToastPromise } from "@/components/utils/toastPromise"
+import { handleFormSubmission } from "@/components/utils/toast"
 import { cn } from "@/lib/utils"
 import { createAndUpdateRepairOrderSchema } from "../constant"
 
-// Type for API response
-interface RepairOrderResponse {
-  success: boolean
-  message?: string
-  data?: any
-}
-
 export default function CreateRepairOrderForm() {
   const router = useRouter()
-  const { toastPromise } = useToastPromise<RepairOrderResponse>()
 
   const defaultDesiredServiceDate = new Date()
   defaultDesiredServiceDate.setDate(defaultDesiredServiceDate.getDate() + 7)
@@ -43,75 +35,21 @@ export default function CreateRepairOrderForm() {
     },
   })
 
-  // Create a wrapper for the API call that properly handles errors
-  const createRepairOrder = async (
-    values: z.infer<typeof createAndUpdateRepairOrderSchema>
-  ): Promise<RepairOrderResponse> => {
-    try {
-      const response = await post("/api/v1/repair-orders", values, {
-        toAuthBackend: false,
-        isAuthorized: true,
-      })
-
-      if (!response.success) {
-        // Create a properly typed error with appropriate context
-        throw createError(
-          response.message || "Failed to create repair order",
-          response.status === 401
-            ? ErrorType.AUTH
-            : response.status === 400
-            ? ErrorType.VALIDATION
-            : response.status! >= 500
-            ? ErrorType.SERVER
-            : ErrorType.UNKNOWN,
-          { response },
-          response.status
-        )
-      }
-
-      return response
-    } catch (error) {
-      // If it's not a network error and not already categorized
-      if (navigator.onLine && !(error as any).type) {
-        throw createError((error as Error)?.message || "An unknown error occurred", ErrorType.UNKNOWN, {
-          originalError: error,
-        })
-      }
-      throw error // Already categorized or network error
-    }
-  }
-
   const onSubmit: () => void = form.handleSubmit(async (values) => {
-    // Use our enhanced toast promise utility
-    toastPromise(createRepairOrder(values), {
-      messages: {
+    await handleFormSubmission(
+      () =>
+        post("/api/v1/repair-orders", values, {
+          toAuthBackend: false,
+          isAuthorized: true,
+        }),
+      {
         loading: "Creating repair order...",
-        success: "Successfully created repair order!",
-        error: (error) => `Failed to create repair order: ${error.message}`,
-      },
-      callbacks: {
-        onSuccess: () => router.push("/repair-orders"),
-        onError: (error) => {
-          // Handle specific error scenarios
-          if (error.type === ErrorType.VALIDATION) {
-            // Could trigger form error display if the API returns field validation errors
-            console.error("Validation error details:", error.details)
-          }
-
-          if (error.type === ErrorType.AUTH) {
-            // Could redirect to login
-            console.error("Authentication error")
-          }
-        },
-      },
-      // Different messages for different error types
-      errorTypeHandlers: {
-        [ErrorType.NETWORK]: () => "Network error. Please check your connection and try again.",
-        [ErrorType.SERVER]: () => "Server error. Our team has been notified. Please try again later.",
-        [ErrorType.AUTH]: () => "Authentication error. Please log in again.",
-        [ErrorType.VALIDATION]: (error) => `Invalid input: ${error.message}`,
-      },
-    })
+        success: "Repair order created successfully!",
+        error: "Failed to create repair order",
+        redirectTo: "/repair-orders", // or wherever you want to redirect
+        router,
+      }
+    )
   })
 
   return (
