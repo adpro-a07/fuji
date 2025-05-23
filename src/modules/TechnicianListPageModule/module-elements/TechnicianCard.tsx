@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserData"
+import Link from "next/link"
 
 export function TechnicianCard({ technician }: { technician: UserData }) {
   const { identity, profile } = technician
@@ -45,7 +46,17 @@ export function TechnicianCard({ technician }: { technician: UserData }) {
           </p>
         </div>
 
-        <Badge variant="secondary">Technician</Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary">Technician</Badge>
+          {identity?.id && (
+            <Link
+              href={`/technicians/${identity.id}/ratings`}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              View Ratings →
+            </Link>
+          )}
+        </div>
       </CardContent>
     </Card>
   )
