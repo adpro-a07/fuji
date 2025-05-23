@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import { Noto_Sans_Mono } from "next/font/google"
 import { UUID } from "crypto"
 import { AuthContextProvider } from "@/components/contexts/AuthContext"
@@ -12,6 +13,13 @@ import { convertGrpcRoleToUserRole, convertTimestampToString } from "@/component
 const noto_sans_mono = Noto_Sans_Mono({
   subsets: ["latin"],
 })
+
+export const metadata: Metadata = {
+  title: "PerbaikiinAja",
+  twitter: {
+    card: "summary_large_image",
+  },
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const grpcUserData = await useUserServer()

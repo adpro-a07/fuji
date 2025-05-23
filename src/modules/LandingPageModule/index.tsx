@@ -14,7 +14,7 @@ const LandingPageModule = async () => {
           </p>
           <div className="mt-3 space-x-3">
             <Button asChild>
-              <Link href="/repair/request">Request a repair order</Link>
+              <Link href="/repair-orders">Request a repair order</Link>
             </Button>
             <Button variant="outline" asChild>
               <Link href="/about">How it works</Link>
