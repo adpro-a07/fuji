@@ -1,8 +1,8 @@
 import { BookCheck, BookKey, BookMarked, BookOpen, BookX } from "lucide-react"
-import { RepairOrderWithTechnicianDataInterface } from "@/modules/RepairOrderListModule/interface"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import React from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { RepairOrderWithTechnicianDataInterface } from "@/modules/RepairOrderListModule/interface"
 import DeleteRepairOrderBtn from "../module-elements/DeleteRepairOrderBtn"
 import EditRepairOrderModal from "../module-elements/EditRepairOrderModal"
 

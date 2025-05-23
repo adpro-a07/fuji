@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation"
 import React from "react"
+import { UUID } from "crypto"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
+import { AuthClient } from "@/lib/grpc"
+import MainRepairOrderDetailSection from "./sections/MainRepairOrderDetailSection"
 import {
   RepairOrderResponseInterface,
   RepairOrderWithTechnicianDataInterface,
 } from "../RepairOrderListModule/interface"
-import { AuthClient } from "@/lib/grpc"
-import MainRepairOrderDetailSection from "./sections/MainRepairOrderDetailSection"
 
 export default async function RepairOrderDetailPageModule({ repairOrderId }: { repairOrderId: string }) {
   try {
@@ -20,13 +21,15 @@ export default async function RepairOrderDetailPageModule({ repairOrderId }: { r
     const authClient = AuthClient.getInstance()
 
     // Get the technician ids
-    const technicianDataResponse = await authClient.lookupUserById(repairOrderResponse.data?.technicianId!)
+    const technicianDataResponse = await authClient.lookupUserById(repairOrderResponse.data?.technicianId as UUID)
 
     if (technicianDataResponse.error) throw new Error(technicianDataResponse.error.message)
 
+    if (!technicianDataResponse.data) throw new Error("Technician data not found")
+
     const repairOrder: RepairOrderWithTechnicianDataInterface = {
       ...repairOrderResponse.data!,
-      technician: technicianDataResponse.data?.userData!,
+      technician: technicianDataResponse.data.userData!,
     }
 
     return (
