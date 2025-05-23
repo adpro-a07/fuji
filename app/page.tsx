@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import LandingPageModule from "@/modules/LandingPageModule"
 
 export const metadata: Metadata = {
-  title: "Next.js Enterprise Boilerplate",
+  title: "PerbaikiinAja",
   twitter: {
     card: "summary_large_image",
   },
