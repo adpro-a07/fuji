@@ -15,8 +15,8 @@ const statusIcons = {
 }
 
 export default function MainRepairOrderDetailSection({
-  repairOrder,
-}: {
+                                                       repairOrder,
+                                                     }: {
   repairOrder: RepairOrderWithTechnicianDataInterface
 }) {
   const icon = statusIcons[repairOrder.status] ?? statusIcons.DEFAULT

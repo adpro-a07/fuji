@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { NextResponse } from "next/server"
 import { convertGrpcRoleToUserRole } from "@/components/utils/grpcConverter"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
 import { AuthClient } from "@/lib/grpc"
@@ -8,6 +8,10 @@ import { AuthClient } from "@/lib/grpc"
 const routePermissions: Record<string, UserRole[]> = {
   "/repair-orders": [UserRole.CUSTOMER],
   "/repair-orders/create": [UserRole.CUSTOMER],
+  "/admin": [UserRole.ADMIN],
+  "/admin/coupons": [UserRole.ADMIN],
+  "/admin/coupons/create": [UserRole.ADMIN],
+  "/admin/coupons/[id]/edit": [UserRole.ADMIN],
 }
 
 // Logger utility with readable timestamps and request IDs

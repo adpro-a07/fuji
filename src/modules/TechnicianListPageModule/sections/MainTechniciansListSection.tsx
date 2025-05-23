@@ -4,9 +4,9 @@ import PaginationElement from "../module-elements/PaginationElement"
 import { TechnicianCard } from "../module-elements/TechnicianCard"
 
 export default function MainTechniciansListSection({
-  technicians,
-  totalPages,
-}: {
+                                                     technicians,
+                                                     totalPages,
+                                                   }: {
   technicians: UserData[]
   totalPages: number
 }) {
