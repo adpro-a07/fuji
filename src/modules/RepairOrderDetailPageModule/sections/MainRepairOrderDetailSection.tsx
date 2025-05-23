@@ -1,9 +1,10 @@
-import { BookCheck, BookKey, BookMarked, BookOpen, BookX, Pencil, Trash } from "lucide-react"
+import { BookCheck, BookKey, BookMarked, BookOpen, BookX, Pencil } from "lucide-react"
 import { RepairOrderWithTechnicianDataInterface } from "@/modules/RepairOrderListModule/interface"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import DeleteRepairOrderBtn from "../module-elements/DeleteRepairOrderBtn"
 
 const statusIcons = {
   PENDING_CONFIRMATION: <BookKey className="text-yellow-500" />,
@@ -91,9 +92,7 @@ export default function MainRepairOrderDetailSection({
             <Button variant="outline">
               <Pencil className="mr-2 h-4 w-4" /> Edit
             </Button>
-            <Button variant="destructive">
-              <Trash className="mr-2 h-4 w-4" /> Delete
-            </Button>
+            <DeleteRepairOrderBtn repairOrderId={repairOrder.id} />
           </div>
         </>
       )}
