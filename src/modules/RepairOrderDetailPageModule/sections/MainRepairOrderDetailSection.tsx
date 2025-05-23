@@ -1,10 +1,10 @@
-import { BookCheck, BookKey, BookMarked, BookOpen, BookX, Pencil } from "lucide-react"
+import { BookCheck, BookKey, BookMarked, BookOpen, BookX } from "lucide-react"
 import { RepairOrderWithTechnicianDataInterface } from "@/modules/RepairOrderListModule/interface"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import React from "react"
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import DeleteRepairOrderBtn from "../module-elements/DeleteRepairOrderBtn"
+import EditRepairOrderModal from "../module-elements/EditRepairOrderModal"
 
 const statusIcons = {
   PENDING_CONFIRMATION: <BookKey className="text-yellow-500" />,
@@ -20,7 +20,7 @@ export default function MainRepairOrderDetailSection({
   repairOrder: RepairOrderWithTechnicianDataInterface
 }) {
   const icon = statusIcons[repairOrder.status] ?? statusIcons.DEFAULT
-  const technician = repairOrder.technician
+  const { technician, ...repairOrderWithoutTechnician } = repairOrder
 
   const showActions = repairOrder.status === "PENDING_CONFIRMATION"
   return (
@@ -89,9 +89,7 @@ export default function MainRepairOrderDetailSection({
         <>
           <Separator className="my-4" />
           <div className="flex justify-end gap-2 px-6 pb-4">
-            <Button variant="outline">
-              <Pencil className="mr-2 h-4 w-4" /> Edit
-            </Button>
+            <EditRepairOrderModal repairOrder={repairOrderWithoutTechnician} />
             <DeleteRepairOrderBtn repairOrderId={repairOrder.id} />
           </div>
         </>
