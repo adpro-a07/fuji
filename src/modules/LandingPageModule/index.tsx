@@ -17,7 +17,7 @@ const LandingPageModule = async () => {
               <Link href="/repair-orders">Request a repair order</Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/about">How it works</Link>
+              <Link href="/technicians">View our technicians</Link>
             </Button>
           </div>
         </div>

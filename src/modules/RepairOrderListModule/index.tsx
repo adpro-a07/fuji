@@ -8,15 +8,15 @@ import MainRepairOrdersListSection from "./sections/MainRepairOrdersListSection"
 export default async function RepairOrderListModule() {
   try {
     // Get all repair orders
-    const repair_orders_response = await get<RepairOrderResponseInterface[]>("/api/v1/repair-orders", {
+    const repairOrdersResponse = await get<RepairOrderResponseInterface[]>("/api/v1/repair-orders", {
       isAuthorized: true,
     })
 
-    if (!repair_orders_response.success) throw new Error(repair_orders_response.message)
+    if (!repairOrdersResponse.success) throw new Error(repairOrdersResponse.message)
 
     // Group all the technician ids of the repair orders
-    const technician_ids_request: Array<{ type: "userId" | "email"; value: string }> =
-      repair_orders_response.data?.map((repair_order) => ({
+    const technicianIdsRequest: Array<{ type: "userId" | "email"; value: string }> =
+      repairOrdersResponse.data?.map((repair_order) => ({
         type: "userId",
         value: repair_order.technicianId as string,
       })) ?? []
@@ -24,7 +24,7 @@ export default async function RepairOrderListModule() {
     const authClient = AuthClient.getInstance()
 
     // Get the technician ids
-    const response = await authClient.batchLookupUsers(technician_ids_request, false)
+    const response = await authClient.batchLookupUsers(technicianIdsRequest, false)
 
     if (response.error) throw new Error(response.error.message)
 
@@ -32,8 +32,8 @@ export default async function RepairOrderListModule() {
     const usersMap = new Map(response.data?.results?.map((user) => [user.userData?.identity?.id, user.userData!]))
 
     // Create a combined repair orders array
-    const repair_orders: RepairOrderWithTechnicianDataInterface[] =
-      repair_orders_response.data?.map((repair_order) => ({
+    const repairOrders: RepairOrderWithTechnicianDataInterface[] =
+      repairOrdersResponse.data?.map((repair_order) => ({
         ...repair_order,
         technician: usersMap.get(repair_order.technicianId)!,
       })) ?? []
@@ -41,7 +41,7 @@ export default async function RepairOrderListModule() {
     return (
       <section>
         <div className="pt-16">
-          <MainRepairOrdersListSection repair_orders={repair_orders} />
+          <MainRepairOrdersListSection repair_orders={repairOrders} />
         </div>
       </section>
     )
