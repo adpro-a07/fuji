@@ -45,7 +45,6 @@ export default function RepairOrderCardExpandedContent({ repairOrder }: { repair
                         </DialogHeader>
                         <CreateTechnicianReportForm
                             repairOrderId={repairOrder.id}
-                            itemName={repairOrder.itemName}
                             onSuccess={handleCreateReportSuccess}
                         />
                     </DialogContent>
