@@ -4,9 +4,11 @@ import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { useAuthContext } from "../contexts/AuthContext"
+import { UserRole } from "../contexts/AuthContext/interface"
 import { post } from "../utils/customFetch/serverFetchClients"
 import { logoutAction } from "../utils/logout/actions"
 import { handleFormSubmission } from "../utils/toast"
@@ -52,9 +54,21 @@ function NavbarContent() {
   return (
     <nav className="fixed top-0 right-0 left-0 z-10 w-full border-b border-transparent bg-white shadow-md dark:border-white dark:bg-slate-950">
       <div className="flex items-center justify-between px-5 py-3">
-        <Link href="/" className="text-xl font-bold">
-          PerbaikiinAja
-        </Link>
+        <div className="flex items-center">
+          <Link href="/" className="text-xl font-bold">
+            PerbaikiinAja
+          </Link>
+          {user && user.role === UserRole.ADMIN && (
+            <Link href="/admin" style={{ marginLeft: 32 }}>
+              <Badge
+                variant="outline"
+                className="hover:bg-accent hover:text-accent-foreground cursor-pointer text-lg font-semibold transition-colors"
+              >
+                Admin Dashboard
+              </Badge>
+            </Link>
+          )}
+        </div>
 
         {/* Desktop */}
         <div className="hidden h-full items-center space-x-4 md:flex">
@@ -91,6 +105,23 @@ function NavbarContent() {
       {/* Mobile Dropdown */}
       {isOpen && (
         <div className="mb-2 flex flex-col space-y-2 border-t p-2 md:hidden">
+          <div className="mb-2 flex flex-col items-start space-y-1">
+            <div className="mb-2 flex flex-col items-start space-y-1">
+              <Link href="/" className="text-xl font-bold">
+                PerbaikiinAja
+              </Link>
+              {user && user.role === UserRole.ADMIN && (
+                <Link href="/admin" style={{ marginTop: 5 }}>
+                  <Badge
+                    variant="outline"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer text-lg font-semibold transition-colors"
+                  >
+                    Admin Dashboard
+                  </Badge>
+                </Link>
+              )}
+            </div>
+          </div>
           {user ? (
             <>
               <span className="ml-1 text-sm font-medium">
