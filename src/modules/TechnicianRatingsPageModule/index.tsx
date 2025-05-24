@@ -10,17 +10,17 @@ import {
 import RatingsSection from "./sections/RatingsSection"
 
 export default async function TechnicianRatingsPageModule({
-                                                            technicianId,
-                                                            currentPage,
+  technicianId,
+  currentPage,
                                                           }: {
   technicianId: string
   currentPage: number
+  searchQuery?: string
 }) {
   try {
-    const response = await get<RatingResponseInterface[]>(
-      `/api/v1/rating/technicians/${technicianId}/ratings`,
-      { isAuthorized: true }
-    )
+    const response = await get<RatingResponseInterface[]>(`/api/v1/rating/technicians/${technicianId}/ratings`, {
+      isAuthorized: true,
+    })
 
     if (!response.success || !response.data) {
       throw new Error(response.message || "Failed to fetch ratings")
@@ -36,11 +36,10 @@ export default async function TechnicianRatingsPageModule({
       )
     }
 
-    const technicianIdsRequest: Array<{ type: "userId" | "email"; value: string }> =
-      ratingsData.map((rating) => ({
-        type: "userId" as const,
-        value: rating.technicianId as string,
-      }))
+    const technicianIdsRequest: Array<{ type: "userId" | "email"; value: string }> = ratingsData.map((rating) => ({
+      type: "userId" as const,
+      value: rating.technicianId as string,
+    }))
 
     const authClient = AuthClient.getInstance()
     const technicianLookupResponse = await authClient.batchLookupUsers(technicianIdsRequest, false)
@@ -55,11 +54,10 @@ export default async function TechnicianRatingsPageModule({
       ])
     )
 
-    const userIdsRequest: Array<{ type: "userId" | "email"; value: string }> =
-      ratingsData.map((rating) => ({
-        type: "userId" as const,
-        value: rating.userId as string,
-      }))
+    const userIdsRequest: Array<{ type: "userId" | "email"; value: string }> = ratingsData.map((rating) => ({
+      type: "userId" as const,
+      value: rating.userId as string,
+    }))
 
     const userLookupResponse = await authClient.batchLookupUsers(userIdsRequest, false)
     if (userLookupResponse.error) {
@@ -81,34 +79,25 @@ export default async function TechnicianRatingsPageModule({
     }))
 
     return (
-      <section className="pt-20 px-6">
-        <div className="flex flex-col items-center text-center mb-6">
-          <a
-            href="/technicians"
-            className="self-start text-blue-600 hover:underline text-sm mb-2"
-          >
+      <section className="px-6 pt-20">
+        <div className="mb-6 flex flex-col items-center text-center">
+          <a href="/technicians" className="mb-2 self-start text-sm text-blue-600 hover:underline">
             ← Back to Technicians
           </a>
-          <h1 className="text-2xl font-bold">
-            {techniciansMap.get(technicianId)?.identity?.fullName}'s Ratings
-          </h1>
+          <h1 className="text-2xl font-bold">{techniciansMap.get(technicianId)?.identity?.fullName}'s Ratings</h1>
         </div>
 
-        <RatingsSection
-          ratings={ratings}
-          totalPages={1}
-          currentPage={currentPage}
-        />
+        <RatingsSection ratings={ratings} totalPages={1} currentPage={currentPage} />
       </section>
     )
   } catch (error: any) {
     const errorMessage = error.message || "Gagal mengambil data rating."
 
     return (
-      <section className="pt-20 px-6 text-center">
-        <h1 className="text-xl font-bold text-red-600 mb-4">Terjadi kesalahan</h1>
+      <section className="px-6 pt-20 text-center">
+        <h1 className="mb-4 text-xl font-bold text-red-600">Terjadi kesalahan</h1>
         <p className="text-muted-foreground mb-4">{errorMessage}</p>
-        <a href="/technicians" className="text-blue-600 hover:underline text-sm">
+        <a href="/technicians" className="text-sm text-blue-600 hover:underline">
           ← Kembali ke halaman teknisi
         </a>
       </section>
