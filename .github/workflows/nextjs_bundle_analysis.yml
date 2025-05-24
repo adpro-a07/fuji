@@ -13,6 +13,10 @@ on:
       - development
   workflow_dispatch:
 
+permissions:
+  pull-requests: write  # Required for creating/updating PR comments
+  contents: read       # Required for actions/checkout  
+
 defaults:
   run:
     # change this if your nextjs app does not live at the root of the repo
