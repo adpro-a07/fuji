@@ -9,5 +9,5 @@ export default async function page(props: {
   const searchParams = await props.searchParams
   const currentPage = Number(searchParams?.page) || 1
 
-  return <TechnicianListPageModule currentPage={currentPage} />
+  return <TechnicianListPageModule currentPage={currentPage} isVerbose={true} />
 }

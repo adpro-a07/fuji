@@ -5,7 +5,13 @@ import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth
 import { TECHNICIAN_LIST_PAGE_SIZE } from "./constant"
 import MainTechniciansListSection from "./sections/MainTechniciansListSection"
 
-export default async function TechnicianListPageModule({ currentPage }: { currentPage: number }) {
+export default async function TechnicianListPageModule({
+  currentPage,
+  isVerbose = false,
+}: {
+  currentPage: number
+  isVerbose: boolean
+}) {
   try {
     // Get all technicians
     const authClient = AuthClient.getInstance()
@@ -24,7 +30,11 @@ export default async function TechnicianListPageModule({ currentPage }: { curren
     return (
       <section>
         <div className="pt-16">
-          <MainTechniciansListSection technicians={technicians} totalPages={response.data?.totalPages || 1} />
+          <MainTechniciansListSection
+            technicians={technicians}
+            totalPages={response.data?.totalPages || 1}
+            isVerbose={isVerbose}
+          />
         </div>
       </section>
     )
