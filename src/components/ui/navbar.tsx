@@ -8,9 +8,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { useAuthContext } from "../contexts/AuthContext"
+import { UserRole } from "../contexts/AuthContext/interface"
 import { post } from "../utils/customFetch/serverFetchClients"
 import { logoutAction } from "../utils/logout/actions"
-import { UserRole } from "../contexts/AuthContext/interface"
 import { handleFormSubmission } from "../utils/toast"
 
 function NavbarContent() {
@@ -59,10 +59,10 @@ function NavbarContent() {
             PerbaikiinAja
           </Link>
           {user && user.role === UserRole.ADMIN && (
-            <Link href="/admin" style={{ marginLeft: 32}}>
+            <Link href="/admin" style={{ marginLeft: 32 }}>
               <Badge
                 variant="outline"
-                className="cursor-pointer text-lg font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                className="hover:bg-accent hover:text-accent-foreground cursor-pointer text-lg font-semibold transition-colors"
               >
                 Admin Dashboard
               </Badge>
@@ -105,8 +105,8 @@ function NavbarContent() {
       {/* Mobile Dropdown */}
       {isOpen && (
         <div className="mb-2 flex flex-col space-y-2 border-t p-2 md:hidden">
-          <div className="flex flex-col items-start space-y-1 mb-2">
-            <div className="flex flex-col items-start space-y-1 mb-2">
+          <div className="mb-2 flex flex-col items-start space-y-1">
+            <div className="mb-2 flex flex-col items-start space-y-1">
               <Link href="/" className="text-xl font-bold">
                 PerbaikiinAja
               </Link>
@@ -114,7 +114,7 @@ function NavbarContent() {
                 <Link href="/admin" style={{ marginTop: 5 }}>
                   <Badge
                     variant="outline"
-                    className="cursor-pointer text-lg font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer text-lg font-semibold transition-colors"
                   >
                     Admin Dashboard
                   </Badge>

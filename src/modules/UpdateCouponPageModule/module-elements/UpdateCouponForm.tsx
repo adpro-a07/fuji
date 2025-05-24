@@ -1,19 +1,19 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { format, format as formatDate } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { put } from "@/components/utils/customFetch/serverFetchClients"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import { format, format as formatDate } from "date-fns"
-import { handleFormSubmission } from "@/components/utils/toast"
 import type { StructuredResponse } from "@/components/utils/customFetch/interface"
+import { put } from "@/components/utils/customFetch/serverFetchClients"
+import { handleFormSubmission } from "@/components/utils/toast"
+import { cn } from "@/lib/utils"
 
 const updateCouponSchema = z.object({
   code: z.string().min(1, "Coupon code is required"),
@@ -24,7 +24,7 @@ const updateCouponSchema = z.object({
 
 type CouponFormValues = z.infer<typeof updateCouponSchema>
 
-export default function UpdateCouponForm({ coupon, couponId }: { coupon: CouponFormValues, couponId: string }) {
+export default function UpdateCouponForm({ coupon, couponId }: { coupon: CouponFormValues; couponId: string }) {
   const router = useRouter()
 
   const form = useForm<CouponFormValues>({
@@ -62,16 +62,13 @@ export default function UpdateCouponForm({ coupon, couponId }: { coupon: CouponF
   }
 
   const onSubmit = form.handleSubmit(async (values) => {
-    await handleFormSubmission(
-      () => updateCoupon(values),
-      {
-        loading: "Updating coupon...",
-        success: "Successfully updated coupon!",
-        error: "Failed to update coupon",
-        redirectTo: "/admin/coupons",
-        router,
-      }
-    )
+    await handleFormSubmission(() => updateCoupon(values), {
+      loading: "Updating coupon...",
+      success: "Successfully updated coupon!",
+      error: "Failed to update coupon",
+      redirectTo: "/admin/coupons",
+      router,
+    })
   })
 
   return (
@@ -98,7 +95,13 @@ export default function UpdateCouponForm({ coupon, couponId }: { coupon: CouponF
             <FormItem>
               <FormLabel>Discount Amount</FormLabel>
               <FormControl>
-                <Input type="number" min={1} placeholder="Ex: 20" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Ex: 20"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -111,7 +114,13 @@ export default function UpdateCouponForm({ coupon, couponId }: { coupon: CouponF
             <FormItem>
               <FormLabel>Max Usage</FormLabel>
               <FormControl>
-                <Input type="number" min={1} placeholder="Ex: 100" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Ex: 100"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

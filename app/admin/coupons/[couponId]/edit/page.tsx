@@ -1,8 +1,8 @@
+import { notFound } from "next/navigation"
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
-import UpdateCouponForm from "@/modules/UpdateCouponPageModule/module-elements/UpdateCouponForm"
-import { notFound } from "next/navigation"
 import { CouponResponseInterface } from "@/modules/ManageCouponsPageModule/interface"
+import UpdateCouponForm from "@/modules/UpdateCouponPageModule/module-elements/UpdateCouponForm"
 
 export default async function Page({ params }: { params: { couponId: string } }) {
   const couponId = params.couponId

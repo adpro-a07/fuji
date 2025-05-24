@@ -1,6 +1,6 @@
+import { redirect } from "next/navigation"
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
-import { redirect } from "next/navigation"
 import { CouponResponseInterface } from "./interface"
 import MainManageCouponSection from "./sections/MainManageCouponSection"
 

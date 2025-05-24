@@ -1,19 +1,19 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { format, format as formatDate } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import { format, format as formatDate } from "date-fns"
-import { handleFormSubmission } from "@/components/utils/toast"
 import type { StructuredResponse } from "@/components/utils/customFetch/interface"
+import { post } from "@/components/utils/customFetch/serverFetchClients"
+import { handleFormSubmission } from "@/components/utils/toast"
+import { cn } from "@/lib/utils"
 
 // Coupon creation schema
 const createCouponSchema = z.object({
@@ -67,16 +67,13 @@ export default function CreateCouponForm() {
   }
 
   const onSubmit = form.handleSubmit(async (values) => {
-    await handleFormSubmission(
-      () => createCoupon(values),
-      {
-        loading: "Creating coupon...",
-        success: "Successfully created coupon!",
-        error: "Failed to create coupon",
-        redirectTo: "/admin/coupons",
-        router,
-      }
-    )
+    await handleFormSubmission(() => createCoupon(values), {
+      loading: "Creating coupon...",
+      success: "Successfully created coupon!",
+      error: "Failed to create coupon",
+      redirectTo: "/admin/coupons",
+      router,
+    })
   })
 
   return (
@@ -103,7 +100,13 @@ export default function CreateCouponForm() {
             <FormItem>
               <FormLabel>Discount Amount</FormLabel>
               <FormControl>
-                <Input type="number" min={1} placeholder="Ex: 20" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Ex: 20"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -116,7 +119,13 @@ export default function CreateCouponForm() {
             <FormItem>
               <FormLabel>Max Usage</FormLabel>
               <FormControl>
-                <Input type="number" min={1} placeholder="Ex: 100" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Ex: 100"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

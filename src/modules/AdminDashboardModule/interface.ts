@@ -16,4 +16,3 @@ export interface Alert {
   validUntil: string
   daysLeft: number
 }
-

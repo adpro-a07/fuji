@@ -1,12 +1,12 @@
 "use client"
-import React, { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CouponResponseInterface } from "../interface"
-import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
+import React, { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { del as deleteRequest } from "@/components/utils/customFetch/serverFetchClients"
 import { DeletePopUpModal } from "./DeletePopUpModal"
-import Link from "next/link"
+import { CouponResponseInterface } from "../interface"
 
 export default function CouponCard({ coupon }: { coupon: CouponResponseInterface }) {
   const router = useRouter()
@@ -30,7 +30,10 @@ export default function CouponCard({ coupon }: { coupon: CouponResponseInterface
             </div>
           </CardTitle>
           <CardDescription>
-            Valid until: {coupon.validUntil instanceof Date ? coupon.validUntil.toLocaleDateString() : new Date(coupon.validUntil).toLocaleDateString()}
+            Valid until:{" "}
+            {coupon.validUntil instanceof Date
+              ? coupon.validUntil.toLocaleDateString()
+              : new Date(coupon.validUntil).toLocaleDateString()}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 text-sm">

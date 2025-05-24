@@ -1,7 +1,7 @@
 import React from "react"
-import UpdateCouponForm from "../module-elements/UpdateCouponForm"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { CouponResponseInterface } from "@/modules/ManageCouponsPageModule/interface"
+import UpdateCouponForm from "../module-elements/UpdateCouponForm"
 
 export default async function MainUpdateCouponSection({ couponId }: { couponId: string }) {
   const response = await get<CouponResponseInterface>(`/api/v1/coupons/${couponId}`, {
