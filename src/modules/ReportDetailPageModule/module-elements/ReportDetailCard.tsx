@@ -2,16 +2,23 @@ import React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ReportResponseInterface } from "../interface"
 
-export default function ReportDetailCard({ report }: { report: ReportResponseInterface }) {
+export default function ReportDetailCard({
+  report,
+  technicianNames = {},
+}: {
+  report: ReportResponseInterface
+  technicianNames?: Record<string, string>
+}) {
+  const technicianName = technicianNames[report.technicianId] || report.technicianId
   return (
     <Card className="max-w-8xl mx-auto w-full shadow">
       <CardHeader>
-        <CardTitle className="text-2xl">
-          Technician: <br />
-          {report.technicianId}
-        </CardTitle>
+        <CardTitle className="text-2xl">Technician Name: {technicianName}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 text-xl">
+        <div>
+          <span className="font-semibold">ID:</span> {report.technicianId}
+        </div>
         <div>
           <span className="font-semibold">Diagnosis:</span> {report.diagnosis}
         </div>

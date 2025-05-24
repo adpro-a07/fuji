@@ -3,6 +3,8 @@ import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { ReportResponseInterface } from "./interface"
 import MainReportListSection from "./sections/MainReportListSection"
+import { AuthClient } from "@/lib/grpc"
+import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
 export default async function ReportListModule() {
   try {
@@ -14,10 +16,22 @@ export default async function ReportListModule() {
 
     const reports: ReportResponseInterface[] = reportsResponse.data ?? []
 
+    // Fetch all technicians for name mapping
+    const authClient = AuthClient.getInstance()
+    const techniciansResponse = await authClient.listUsers({
+      role: UserRole.TECHNICIAN,
+    })
+    let technicianNames: Record<string, string> = {}
+    if (!techniciansResponse.error && techniciansResponse.data?.users) {
+      technicianNames = Object.fromEntries(
+        techniciansResponse.data.users.map((u) => [u.identity?.id, u.identity?.fullName])
+      )
+    }
+
     return (
       <section>
         <div className="pt-16">
-          <MainReportListSection reports={reports} />
+          <MainReportListSection reports={reports} technicianNames={technicianNames} />
         </div>
       </section>
     )

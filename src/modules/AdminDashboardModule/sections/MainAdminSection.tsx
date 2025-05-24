@@ -40,18 +40,28 @@ export function MainAdminSection({
     <div className="bg-background text-foreground flex min-h-screen flex-col items-center p-6">
       <h2 className="mb-6 text-2xl font-semibold">Admin Panel</h2>
 
+      {/* Buttons for managing coupons and viewing reports */}
+      <div className="mb-6 flex space-x-4">
+        <Button asChild>
+          <Link href="/admin/reports">View All Reports</Link>
+        </Button>
+        <Button asChild>
+          <Link href="/admin/coupons">Manage Coupons</Link>
+        </Button>
+      </div>
+
       <div className="mb-2 flex w-full max-w-4xl flex-wrap justify-center gap-6">
         <div className="mb-8 grid w-full max-w-4xl grid-cols-2 gap-6">
-          <Card className="col-span-2 h-full items-center p-6 shadow">
-            <h3 className="mb-2 text-lg font-semibold">Completed Reports</h3>
+          <Card className="col-span-2 h-full w-full max-w-4xl items-center p-6 shadow">
+            <h3 className="mb-1 text-2xl font-semibold">Completed Reports</h3>
             <p className="text-8xl font-bold">{completedReports.length}</p>
           </Card>
-          <Card className="items-center p-6 shadow">
-            <h3 className="mb-2 text-lg font-semibold">Total Coupons</h3>
+          <Card className="w-full max-w-4xl items-center p-6 shadow">
+            <h3 className="mb-2 text-2xl font-semibold">Total Coupons</h3>
             <p className="text-6xl font-bold">{totalCoupons}</p>
           </Card>
-          <Card className="items-center p-6 shadow">
-            <h3 className="mb-2 text-lg font-semibold">Coupons Breakdown</h3>
+          <Card className="w-full max-w-4xl items-center p-6 shadow">
+            <h3 className="mb-2 text-2xl font-semibold">Coupons Breakdown</h3>
             <div className="space-y-1 text-sm">
               <p className="text-xl">
                 Active: <span className="font-bold text-green-600">{activeCoupons}</span>
@@ -64,30 +74,31 @@ export function MainAdminSection({
               </p>
             </div>
           </Card>
-          <Card className="col-span-2 items-center p-6 shadow">
-            <h3 className="mb-2 text-lg font-semibold">Top 3 Technicians (Completed Reports)</h3>
-            {topTechnicians.length > 0 ? (
-              <ol className="list-decimal pl-5">
-                {topTechnicians.map(([technicianId, count]) => {
-                  const name = technicianNames[technicianId] ?? `Technician ID: ${technicianId}`
-                  return (
-                    <li key={technicianId} className="mb-2">
-                      <span className="font-bold">
-                        {name} — {count} completed report{count > 1 ? "s" : ""}
-                      </span>
-                    </li>
-                  )
-                })}
-              </ol>
-            ) : (
-              <div className="text-gray-500">No technician reports found</div>
-            )}
-          </Card>
         </div>
       </div>
 
-      <div className="mb-8 w-full max-w-2xl">
-        <Card className="p-6 shadow">
+      <div className="mb-8 w-full max-w-4xl">
+        <Card className="mb-6 w-full max-w-4xl items-center p-6 shadow">
+          <h3 className="mb-2 text-lg font-semibold">Top 3 Technicians (Completed Reports)</h3>
+          {topTechnicians.length > 0 ? (
+            <ol className="list-decimal pl-5 font-medium">
+              {topTechnicians.map(([technicianId, count]) => {
+                // Show technician name if available, otherwise fallback to ID
+                const name = technicianNames[technicianId] || `Technician ID: ${technicianId}`
+                return (
+                  <li key={technicianId} className="mb-2">
+                    <span className="font-semibold">
+                      {name} — {count} completed report{count > 1 ? "s" : ""}
+                    </span>
+                  </li>
+                )
+              })}
+            </ol>
+          ) : (
+            <div className="text-gray-500">No technician reports found</div>
+          )}
+        </Card>
+        <Card className="w-full max-w-4xl items-center p-6 shadow">
           <h3 className="mb-4 text-lg font-semibold">Top Coupons</h3>
           {topCoupons.length > 0 ? (
             <ul className="list-decimal pl-5">
@@ -103,9 +114,9 @@ export function MainAdminSection({
         </Card>
       </div>
 
-      <div className="w-full max-w-2xl">
-        <Card className="border border-yellow-200 bg-yellow-50 p-6 shadow dark:border-yellow-700 dark:bg-yellow-950">
-          <h3 className="mb-4 text-lg font-semibold text-yellow-800 dark:text-yellow-300">Alerts</h3>
+      <div className="w-full max-w-4xl">
+        <Card className="w-full max-w-4xl border border-yellow-200 bg-yellow-50 p-6 shadow dark:border-yellow-700 dark:bg-yellow-950">
+          <h3 className="mb-4 text-lg font-semibold text-yellow-800 dark:text-yellow-300">Alerts!</h3>
           {alerts.length > 0 ? (
             <ul className="list-disc pl-5">
               {alerts.map((alert) => (
@@ -120,15 +131,6 @@ export function MainAdminSection({
             <div className="text-gray-500 dark:text-gray-400">No coupon alerts</div>
           )}
         </Card>
-      </div>
-
-      <div className="mt-8 flex space-x-4">
-        <Button asChild>
-          <Link href="/admin/reports">View All Reports</Link>
-        </Button>
-        <Button asChild>
-          <Link href="/admin/coupons">Manage Coupons</Link>
-        </Button>
       </div>
     </div>
   )

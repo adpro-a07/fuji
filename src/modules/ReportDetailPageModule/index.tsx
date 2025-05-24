@@ -2,6 +2,8 @@ import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { ReportResponseInterface } from "@/modules/ReportListModule/interface"
 import MainReportDetailSection from "./sections/MainReportDetailSection"
+import { AuthClient } from "@/lib/grpc"
+import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
 interface Props {
   reportId: string
@@ -17,9 +19,21 @@ export default async function ReportDetailPageModule({ reportId }: Props) {
 
   const report = reportRes.data
 
+  // Fetch all technicians for name mapping
+  const authClient = AuthClient.getInstance()
+  const techniciansResponse = await authClient.listUsers({
+    role: UserRole.TECHNICIAN,
+  })
+  let technicianNames: Record<string, string> = {}
+  if (!techniciansResponse.error && techniciansResponse.data?.users) {
+    technicianNames = Object.fromEntries(
+      techniciansResponse.data.users.map((u) => [u.identity?.id, u.identity?.fullName])
+    )
+  }
+
   return (
     <section className="m-20 mx-auto max-w-6xl p-8">
-      <MainReportDetailSection report={report} />
+      <MainReportDetailSection report={report} technicianNames={technicianNames} />
     </section>
   )
 }

@@ -6,9 +6,10 @@ import ReportDetailCard from "../module-elements/ReportDetailCard"
 
 interface Props {
   report: ReportResponseInterface
+  technicianNames?: Record<string, string>
 }
 
-export default function MainReportDetailSection({ report }: Props) {
+export default function MainReportDetailSection({ report, technicianNames = {} }: Props) {
   const router = useRouter()
 
   return (
@@ -17,7 +18,7 @@ export default function MainReportDetailSection({ report }: Props) {
         Back
       </button>
       <h1 className="mb-6 text-4xl font-bold text-gray-900 dark:text-gray-100">Detail Report</h1>
-      <ReportDetailCard report={report} />
+      <ReportDetailCard report={report} technicianNames={technicianNames} />
     </div>
   )
 }

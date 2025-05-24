@@ -3,6 +3,8 @@ import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { CouponResponseInterface } from "@/modules/ManageCouponsPageModule/interface"
 import { Alert, Report } from "./interface"
 import { MainAdminSection } from "./sections/MainAdminSection"
+import { AuthClient } from "@/lib/grpc"
+import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
 export default async function AdminDashboardModule() {
   const couponsRes = await get<CouponResponseInterface[]>("/api/v1/coupons", { isAuthorized: true })
@@ -11,28 +13,16 @@ export default async function AdminDashboardModule() {
   const reportsRes = await get<Report[]>("/api/v1/admin/reports", { isAuthorized: true })
   const completedReports = reportsRes.success && reportsRes.data ? reportsRes.data : []
 
-  // Find top 3 technician IDs
-  const technicianReportCount: Record<string, number> = {}
-  completedReports.forEach((report) => {
-    if (report.technicianId) {
-      technicianReportCount[report.technicianId] = (technicianReportCount[report.technicianId] || 0) + 1
-    }
+  // Fetch all technicians using gRPC
+  const authClient = AuthClient.getInstance()
+  const techniciansResponse = await authClient.listUsers({
+    role: UserRole.TECHNICIAN,
   })
-  const topTechnicianIds = Object.entries(technicianReportCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([id]) => id)
-
-  // Fetch technician names
   let technicianNames: Record<string, string> = {}
-  if (topTechnicianIds.length > 0) {
-    // gunakan param `ids`
-    const usersRes = await get<{ id: string; fullName: string }[]>(`/api/v1/users?ids=${topTechnicianIds.join(",")}`, {
-      isAuthorized: true,
-    })
-    if (usersRes.success && usersRes.data) {
-      technicianNames = Object.fromEntries(usersRes.data.map((u) => [u.id, u.fullName]))
-    }
+  if (!techniciansResponse.error && techniciansResponse.data?.users) {
+    technicianNames = Object.fromEntries(
+      techniciansResponse.data.users.map((u) => [u.identity?.id, u.identity?.fullName])
+    )
   }
 
   const now = new Date()
