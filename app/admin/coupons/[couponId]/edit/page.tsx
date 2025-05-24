@@ -5,7 +5,7 @@ import { CouponResponseInterface } from "@/modules/ManageCouponsPageModule/inter
 import UpdateCouponForm from "@/modules/UpdateCouponPageModule/module-elements/UpdateCouponForm"
 
 export default async function Page({ params }: { params: { couponId: string } }) {
-  const couponId = params.couponId
+  const { couponId } = params
 
   const response = await get<CouponResponseInterface>(`/api/v1/coupons/${couponId}`, {
     isAuthorized: true,
