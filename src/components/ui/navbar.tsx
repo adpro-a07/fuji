@@ -4,10 +4,11 @@ import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
-import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { useAuthContext } from "../contexts/AuthContext"
+import { handleFormSubmission } from "../utils/toast"
+import { post } from "../utils/customFetch/serverFetchClients"
 import { logoutAction } from "../utils/logout/actions"
 
 function NavbarContent() {
@@ -27,23 +28,20 @@ function NavbarContent() {
   }, [searchParams])
 
   const handleLogout: () => void = async () => {
-    toast.promise(
-      (async () => {
-        try {
-          await logoutAction()
-        } catch (error) {
-          console.log(error)
-        }
-      })(),
+    await handleFormSubmission(
+      () =>
+        post(`/api/v1/auth/logout`, null, {
+          toAuthBackend: true,
+          isAuthorized: true,
+        }).then(() => logoutAction()),
       {
         loading: "Logging out...",
-        success: () => {
+        success: "Successfully logged out!",
+        error: "Failed to logout",
+        redirectTo: "/",
+        onSuccess: async () => {
           setIsAuthenticated(false)
           setStoredUser(null)
-          return "Successfully logged out!"
-        },
-        error: () => {
-          return "Failed to log out."
         },
       }
     )
