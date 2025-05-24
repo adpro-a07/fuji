@@ -10,7 +10,7 @@ export default async function TechnicianListPageModule({
   isVerbose = false,
 }: {
   currentPage: number
-  isVerbose: boolean
+  isVerbose?: boolean
 }) {
   try {
     // Get all technicians
