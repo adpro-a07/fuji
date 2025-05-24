@@ -6,15 +6,17 @@ import { TechnicianCard } from "../module-elements/TechnicianCard"
 export default function MainTechniciansListSection({
   technicians,
   totalPages,
+  isVerbose,
 }: {
   technicians: UserData[]
   totalPages: number
+  isVerbose: boolean
 }) {
   return (
     <div className="m-2 rounded-xl p-5">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         {technicians.length > 0 ? (
-          technicians.map((tech) => <TechnicianCard key={tech.identity?.id} technician={tech} />)
+          technicians.map((tech) => <TechnicianCard key={tech.identity?.id} technician={tech} isVerbose={isVerbose} />)
         ) : (
           <div className="col-span-4 py-10 text-center">
             <p className="text-gray-500">No technicians found</p>

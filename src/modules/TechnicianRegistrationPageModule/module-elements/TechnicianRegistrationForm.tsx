@@ -6,13 +6,14 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { handleFormSubmission } from "@/components/utils/toast"
-import { registrationFormSchema } from "../constant"
+import { technicianRegistrationFormSchema } from "../constant"
 
-export const CustomerRegistrationForm = () => {
-  const form = useForm<z.infer<typeof registrationFormSchema>>({
-    resolver: zodResolver(registrationFormSchema),
+export const TechnicianRegistrationForm = () => {
+  const form = useForm<z.infer<typeof technicianRegistrationFormSchema>>({
+    resolver: zodResolver(technicianRegistrationFormSchema),
     defaultValues: {
       email: "",
       fullName: "",
@@ -20,22 +21,24 @@ export const CustomerRegistrationForm = () => {
       password2: "",
       phoneNumber: "",
       address: "",
+      experience: "",
     },
   })
 
   const router = useRouter()
 
-  const onSubmit: () => void = form.handleSubmit(async (values: z.infer<typeof registrationFormSchema>) => {
+  const onSubmit: () => void = form.handleSubmit(async (values: z.infer<typeof technicianRegistrationFormSchema>) => {
     await handleFormSubmission(
       () =>
-        post(`/api/v1/auth/register`, values, {
+        post(`/api/v1/admin/technicians`, values, {
           toAuthBackend: true,
+          isAuthorized: true,
         }),
       {
-        loading: "Registering...",
-        success: "Successfully registered!",
-        error: "Registration failed.",
-        redirectTo: `/login`,
+        loading: "Registering technician...",
+        success: "Technician registered successfully!",
+        error: "Failed to register technician",
+        redirectTo: `/admin/technicians`,
         router,
       }
     )
@@ -81,6 +84,19 @@ export const CustomerRegistrationForm = () => {
                   <FormLabel>Address</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your address" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="experience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Experience</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Enter experience amount" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
