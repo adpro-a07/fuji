@@ -11,7 +11,6 @@ interface RouteConfig {
   pattern?: RegExp
 }
 
-// Enhanced RBAC config with support for static paths and regex patterns
 const routePermissions: Record<string, RouteConfig> = {
   // Static path examples
   "/repair-orders": {
@@ -24,12 +23,12 @@ const routePermissions: Record<string, RouteConfig> = {
     roles: [UserRole.ADMIN],
   },
 
-  // Regex pattern examples
-
-  "^/admin/users/[0-9a-fA-F-]{36}/edit$": {
+  // Regex pattern example for all /admin routes
+  // Highly suggest prompting for better RegEx patterns
+  "^/admin": {
     roles: [UserRole.ADMIN],
     isRegex: true,
-    pattern: /^\/admin\/*$/,
+    pattern: /^\/admin(\/.*)?$/,
   },
 }
 
