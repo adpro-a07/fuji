@@ -7,8 +7,8 @@ import { useAuthContext } from "@/components/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { loginFormSchema } from "../constant"
 import { handleFormSubmission } from "@/components/utils/toast"
+import { loginFormSchema } from "../constant"
 
 export const LoginForm = () => {
   const { login } = useAuthContext()

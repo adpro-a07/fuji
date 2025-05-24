@@ -7,9 +7,9 @@ import { Suspense, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { useAuthContext } from "../contexts/AuthContext"
-import { handleFormSubmission } from "../utils/toast"
 import { post } from "../utils/customFetch/serverFetchClients"
 import { logoutAction } from "../utils/logout/actions"
+import { handleFormSubmission } from "../utils/toast"
 
 function NavbarContent() {
   const [isOpen, setIsOpen] = useState(false)

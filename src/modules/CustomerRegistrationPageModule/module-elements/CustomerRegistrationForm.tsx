@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
-import { registrationFormSchema } from "../constant"
 import { handleFormSubmission } from "@/components/utils/toast"
+import { registrationFormSchema } from "../constant"
 
 export const CustomerRegistrationForm = () => {
   const form = useForm<z.infer<typeof registrationFormSchema>>({

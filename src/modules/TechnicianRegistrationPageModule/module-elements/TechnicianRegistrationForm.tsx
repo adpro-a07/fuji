@@ -6,10 +6,10 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { post } from "@/components/utils/customFetch/serverFetchClients"
-import { technicianRegistrationFormSchema } from "../constant"
 import { Textarea } from "@/components/ui/textarea"
+import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { handleFormSubmission } from "@/components/utils/toast"
+import { technicianRegistrationFormSchema } from "../constant"
 
 export const TechnicianRegistrationForm = () => {
   const form = useForm<z.infer<typeof technicianRegistrationFormSchema>>({
