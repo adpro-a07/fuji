@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserData"
+import Link from "next/link"
 
 export function TechnicianCard({ technician, isVerbose }: { technician: UserData; isVerbose: boolean }) {
   const { identity, profile } = technician
@@ -49,6 +50,16 @@ export function TechnicianCard({ technician, isVerbose }: { technician: UserData
                 <strong>Total Income:</strong> {formatRupiah(profile?.totalIncome?.toString() || 0)}
               </p>
             </>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          {identity?.id && (
+            <Link
+              href={`/technicians/${identity.id}/ratings`}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              View Ratings →
+            </Link>
           )}
         </div>
       </CardContent>
