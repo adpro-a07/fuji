@@ -9,10 +9,12 @@ export function MainAdminSection({
   coupons,
   completedReports,
   alerts,
+  technicianNames = {},
 }: {
   coupons: CouponResponseInterface[]
   completedReports: Report[]
   alerts: Alert[]
+  technicianNames?: Record<string, string>
 }) {
   const now = new Date()
   const totalCoupons = coupons.length
@@ -23,11 +25,22 @@ export function MainAdminSection({
   // Top coupons by usageCount
   const topCoupons = [...coupons].sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0)).slice(0, 5)
 
+  // Top 3 Technicians by completed report count
+  const technicianReportCount: Record<string, number> = {}
+  completedReports.forEach((report) => {
+    if (report.technicianId) {
+      technicianReportCount[report.technicianId] = (technicianReportCount[report.technicianId] || 0) + 1
+    }
+  })
+  const topTechnicians = Object.entries(technicianReportCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+
   return (
     <div className="bg-background text-foreground flex min-h-screen flex-col items-center p-6">
       <h2 className="mb-6 text-2xl font-semibold">Admin Panel</h2>
 
-      <div className="mb-8 flex w-full max-w-4xl flex-wrap justify-center gap-6">
+      <div className="mb-2 flex w-full max-w-4xl flex-wrap justify-center gap-6">
         <div className="mb-8 grid w-full max-w-4xl grid-cols-2 gap-6">
           <Card className="col-span-2 h-full items-center p-6 shadow">
             <h3 className="mb-2 text-lg font-semibold">Completed Reports</h3>
@@ -50,6 +63,25 @@ export function MainAdminSection({
                 Expired: <span className="font-bold text-gray-500">{expiredCoupons}</span>
               </p>
             </div>
+          </Card>
+          <Card className="col-span-2 items-center p-6 shadow">
+            <h3 className="mb-2 text-lg font-semibold">Top 3 Technicians (Completed Reports)</h3>
+            {topTechnicians.length > 0 ? (
+              <ol className="list-decimal pl-5">
+                {topTechnicians.map(([technicianId, count]) => {
+                  const name = technicianNames[technicianId] ?? `Technician ID: ${technicianId}`
+                  return (
+                    <li key={technicianId} className="mb-2">
+                      <span className="font-bold">
+                        {name} — {count} completed report{count > 1 ? "s" : ""}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ol>
+            ) : (
+              <div className="text-gray-500">No technician reports found</div>
+            )}
           </Card>
         </div>
       </div>
