@@ -1,8 +1,8 @@
-import React from "react"
-import MainTechnicianReportListSection from "./sections/MainTechnicianReportListSection"
-import { TechnicianReport, TechnicianReportStatusEnum } from "./interface"
-import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { redirect } from "next/navigation"
+import React from "react"
+import { get } from "@/components/utils/customFetch/serverFetchClients"
+import { TechnicianReport, TechnicianReportStatusEnum } from "./interface"
+import MainTechnicianReportListSection from "./sections/MainTechnicianReportListSection"
 
 export default async function TechnicianReportList({ status }: { status?: string }) {
   const allowedStatuses = Object.values(TechnicianReportStatusEnum)
