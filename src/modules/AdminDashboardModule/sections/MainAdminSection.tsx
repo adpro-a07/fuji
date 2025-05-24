@@ -72,12 +72,12 @@ export function MainAdminSection({
       </div>
 
       <div className="w-full max-w-2xl">
-        <Card className="border border-yellow-200 bg-yellow-50 p-6 shadow">
-          <h3 className="mb-4 text-lg font-semibold text-yellow-800">Alerts</h3>
+        <Card className="border border-yellow-200 bg-yellow-50 p-6 shadow dark:border-yellow-700 dark:bg-yellow-950">
+          <h3 className="mb-4 text-lg font-semibold text-yellow-800 dark:text-yellow-300">Alerts</h3>
           {alerts.length > 0 ? (
             <ul className="list-disc pl-5">
               {alerts.map((alert) => (
-                <li key={alert.couponId} className="mb-2">
+                <li key={alert.couponId} className="mb-2 text-black dark:text-yellow-100">
                   Coupon <span className="font-bold">{alert.code}</span> expires in{" "}
                   <span className="font-bold">{alert.daysLeft}</span> day(s) (until{" "}
                   {new Date(alert.validUntil).toLocaleDateString()})
@@ -85,7 +85,7 @@ export function MainAdminSection({
               ))}
             </ul>
           ) : (
-            <div className="text-gray-500">No coupon alerts</div>
+            <div className="text-gray-500 dark:text-gray-400">No coupon alerts</div>
           )}
         </Card>
       </div>
