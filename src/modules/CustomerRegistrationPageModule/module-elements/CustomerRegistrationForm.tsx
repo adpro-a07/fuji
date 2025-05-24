@@ -2,13 +2,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { registrationFormSchema } from "../constant"
+import { handleFormSubmission } from "@/components/utils/toast"
 
 export const CustomerRegistrationForm = () => {
   const form = useForm<z.infer<typeof registrationFormSchema>>({
@@ -26,29 +26,17 @@ export const CustomerRegistrationForm = () => {
   const router = useRouter()
 
   const onSubmit: () => void = form.handleSubmit(async (values: z.infer<typeof registrationFormSchema>) => {
-    toast.promise(
-      (async () => {
-        const result = await post("/api/v1/auth/register", values, {
+    await handleFormSubmission(
+      () =>
+        post(`/api/v1/auth/register`, values, {
           toAuthBackend: true,
-        })
-
-        if (!result.success) {
-          // Convert unsuccessful result to an error
-          throw new Error(result.message || "Registration failed")
-        }
-      })(),
+        }),
       {
         loading: "Registering...",
-        success: () => {
-          router.push("/login")
-          return "Successfully registered!"
-        },
-        error: (err) => {
-          if (err.message.includes("is already registered with this e-mail address.")) {
-            return "This email address is already registered."
-          }
-          return "Registration failed."
-        },
+        success: "Successfully registered!",
+        error: "Registration failed.",
+        redirectTo: `/login`,
+        router,
       }
     )
   })
