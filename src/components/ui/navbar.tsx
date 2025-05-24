@@ -2,7 +2,7 @@
 
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
@@ -14,6 +14,7 @@ import { logoutAction } from "../utils/logout/actions"
 function NavbarContent() {
   const [isOpen, setIsOpen] = useState(false)
   const { user, setIsAuthenticated, setStoredUser } = useAuthContext()
+  const router = useRouter()
 
   const searchParams = useSearchParams()
   useEffect(() => {
@@ -39,6 +40,7 @@ function NavbarContent() {
         success: "Successfully logged out!",
         error: "Failed to logout",
         redirectTo: "/",
+        router: router,
         onSuccess: async () => {
           setIsAuthenticated(false)
           setStoredUser(null)
