@@ -1,9 +1,8 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserData"
 
-export function TechnicianCard({ technician }: { technician: UserData }) {
+export function TechnicianCard({ technician, isVerbose }: { technician: UserData; isVerbose: boolean }) {
   const { identity, profile } = technician
 
   const formatRupiah = (value: number | string) => {
@@ -23,14 +22,11 @@ export function TechnicianCard({ technician }: { technician: UserData }) {
           </Avatar>
           <div>
             <h2 className="text-xl font-semibold">{identity?.fullName}</h2>
-            <p className="text-muted-foreground text-sm">{identity?.email}</p>
+            {isVerbose && <p className="text-muted-foreground text-sm">{identity?.email}</p>}
           </div>
         </div>
 
         <div className="space-y-1 text-sm">
-          <p>
-            <strong>Phone:</strong> {identity?.phoneNumber}
-          </p>
           <p>
             <strong>Address:</strong> {profile?.address}
           </p>
@@ -40,12 +36,21 @@ export function TechnicianCard({ technician }: { technician: UserData }) {
           <p>
             <strong>Jobs Done:</strong> {profile?.totalJobsDone}
           </p>
-          <p>
-            <strong>Total Income:</strong> {formatRupiah(profile?.totalIncome?.toString() || 0)}
-          </p>
-        </div>
 
-        <Badge variant="secondary">Technician</Badge>
+          {isVerbose && (
+            <>
+              <p>
+                <strong>Phone:</strong> {identity?.phoneNumber}
+              </p>
+              <p>
+                <strong>Email:</strong> {identity?.email}
+              </p>
+              <p>
+                <strong>Total Income:</strong> {formatRupiah(profile?.totalIncome?.toString() || 0)}
+              </p>
+            </>
+          )}
+        </div>
       </CardContent>
     </Card>
   )

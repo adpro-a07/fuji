@@ -1,17 +1,110 @@
-import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 import { convertGrpcRoleToUserRole } from "@/components/utils/grpcConverter"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
 import { AuthClient } from "@/lib/grpc"
 
-// Central RBAC config with static and dynamic paths
-const routePermissions: Record<string, UserRole[]> = {
-  "/repair-orders": [UserRole.CUSTOMER],
-  "/repair-orders/create": [UserRole.CUSTOMER],
-  "/admin": [UserRole.ADMIN],
-  "/admin/coupons": [UserRole.ADMIN],
-  "/admin/coupons/create": [UserRole.ADMIN],
-  "/admin/coupons/[id]/edit": [UserRole.ADMIN],
+// Route configuration type supporting both static paths and regex patterns
+interface RouteConfig {
+  roles: UserRole[]
+  isRegex?: boolean
+  pattern?: RegExp
+}
+
+const routePermissions: Record<string, RouteConfig> = {
+  // Static path examples
+  "/repair-orders": {
+    roles: [UserRole.CUSTOMER],
+  },
+  "/repair-orders/create": {
+    roles: [UserRole.CUSTOMER],
+  },
+  "/admin/technicians": {
+    roles: [UserRole.ADMIN],
+  },
+
+  // Regex pattern example for all /admin routes
+  // Highly suggest prompting for better RegEx patterns
+  "^/admin": {
+    roles: [UserRole.ADMIN],
+    isRegex: true,
+    pattern: /^\/admin(\/.*)?$/,
+  },
+}
+
+// Route matcher utility class
+class RouteMatcher {
+  /**
+   * Find matching route configuration for a given path
+   * Checks static paths first for performance, then regex patterns
+   */
+  static findMatchingRoute(path: string): UserRole[] | null {
+    // First, try exact static path match (fastest)
+    const staticMatch = routePermissions[path]
+    if (staticMatch && !staticMatch.isRegex) {
+      return staticMatch.roles
+    }
+
+    // Then try normalized path match for UUID segments
+    const normalizedPath = this.normalizePath(path)
+    const normalizedMatch = routePermissions[normalizedPath]
+    if (normalizedMatch && !normalizedMatch.isRegex) {
+      return normalizedMatch.roles
+    }
+
+    // Finally, try regex patterns
+    for (const [_key, config] of Object.entries(routePermissions)) {
+      if (config.isRegex && config.pattern) {
+        if (config.pattern.test(path)) {
+          return config.roles
+        }
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * Normalize path by replacing UUID segments with [uuid] placeholder
+   * Maintains backward compatibility with existing UUID normalization
+   */
+  private static normalizePath(path: string): string {
+    path = path.split("?")[0]?.replace(/\/$/, "") as string
+
+    return path
+      .split("/")
+      .map((segment) => (this.isUUIDSegment(segment) ? "[uuid]" : segment))
+      .join("/")
+  }
+
+  /**
+   * Check if a path segment is a UUID
+   */
+  private static isUUIDSegment(segment: string): boolean {
+    return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(segment)
+  }
+
+  /**
+   * Validate route configuration at startup
+   * Ensures regex patterns are valid and compile successfully
+   */
+  static validateConfiguration(): void {
+    for (const [key, config] of Object.entries(routePermissions)) {
+      if (config.isRegex) {
+        try {
+          // Test if pattern exists and is valid
+          if (!config.pattern) {
+            console.warn(`Route config "${key}" marked as regex but missing pattern`)
+          } else {
+            // Test compilation
+            config.pattern.test("/test")
+          }
+        } catch (error) {
+          console.error(`Invalid regex pattern for route "${key}":`, error)
+        }
+      }
+    }
+  }
 }
 
 // Logger utility with readable timestamps and request IDs
@@ -136,39 +229,33 @@ class MiddlewareLogger {
   }
 }
 
-function normalizePath(path: string): string {
-  path = path.split("?")[0]?.replace(/\/$/, "") as string
-
-  return path
-    .split("/")
-    .map((segment) => (isUUIDSegment(segment) ? "[uuid]" : segment))
-    .join("/")
-}
-
-function isUUIDSegment(segment: string): boolean {
-  return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(segment)
-}
+// Validate configuration on module load
+RouteMatcher.validateConfiguration()
 
 export async function middleware(request: NextRequest) {
   const logger = new MiddlewareLogger()
   const { pathname } = request.nextUrl
-  const normalizedPath = normalizePath(pathname)
-  const allowedRoles = routePermissions[normalizedPath]
   const userAgent = request.headers.get("user-agent") || "unknown"
 
   logger.info("Middleware processing request", {
     path: pathname,
-    normalizedPath,
     userAgent,
     method: request.method,
     hasAccessToken: !!request.cookies.get("kilimanjaro-access")?.value,
     hasRefreshToken: !!request.cookies.get("kilimanjaro-refresh")?.value,
   })
 
+  // Use enhanced route matcher
+  const matchStartTime = performance.now()
+  const allowedRoles = RouteMatcher.findMatchingRoute(pathname)
+  logger.logPerformance("Route matching", matchStartTime)
+
   if (!allowedRoles) {
     logger.debug("Public route access granted")
     return NextResponse.next()
   }
+
+  logger.debug("Protected route detected", { allowedRoles })
 
   const accessToken = request.cookies.get("kilimanjaro-access")?.value
   const refreshToken = request.cookies.get("kilimanjaro-refresh")?.value

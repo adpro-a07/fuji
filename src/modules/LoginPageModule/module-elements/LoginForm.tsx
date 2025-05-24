@@ -2,12 +2,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { z } from "zod"
 import { useAuthContext } from "@/components/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { handleFormSubmission } from "@/components/utils/toast"
 import { loginFormSchema } from "../constant"
 
 export const LoginForm = () => {
@@ -22,12 +22,10 @@ export const LoginForm = () => {
   })
 
   const onSubmit: () => void = form.handleSubmit(async (data: z.infer<typeof loginFormSchema>) => {
-    toast.promise(login(data), {
+    await handleFormSubmission(() => login(data), {
       loading: "Logging in...",
-      success: () => {
-        return "Successfully logged in!"
-      },
-      error: (err) => `${err}`,
+      success: "Successfully logged in!",
+      error: "Login failed.",
     })
   })
 

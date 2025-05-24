@@ -2,48 +2,50 @@
 
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
-import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { useAuthContext } from "../contexts/AuthContext"
+import { post } from "../utils/customFetch/serverFetchClients"
 import { logoutAction } from "../utils/logout/actions"
 import { UserRole } from "../contexts/AuthContext/interface"
+import { handleFormSubmission } from "../utils/toast"
 
 function NavbarContent() {
   const [isOpen, setIsOpen] = useState(false)
   const { user, setIsAuthenticated, setStoredUser } = useAuthContext()
+  const router = useRouter()
 
   const searchParams = useSearchParams()
   useEffect(() => {
     const refreshParam = searchParams.get("_refresh")
+
     if (refreshParam) {
       const url = new URL(window.location.href)
       url.searchParams.delete("_refresh")
+
       window.location.replace(url)
     }
   }, [searchParams])
 
   const handleLogout: () => void = async () => {
-    toast.promise(
-      (async (): Promise<void> => {
-        try {
-          await logoutAction()
-        } catch (error) {
-          console.log(error)
-        }
-      })(),
+    await handleFormSubmission(
+      () =>
+        post(`/api/v1/auth/logout`, null, {
+          toAuthBackend: true,
+          isAuthorized: true,
+        }).then(() => logoutAction()),
       {
         loading: "Logging out...",
-        success: () => {
+        success: "Successfully logged out!",
+        error: "Failed to logout",
+        redirectTo: "/",
+        router: router,
+        onSuccess: async () => {
           setIsAuthenticated(false)
           setStoredUser(null)
-          return "Successfully logged out!"
-        },
-        error: () => {
-          return "Failed to log out."
         },
       }
     )
