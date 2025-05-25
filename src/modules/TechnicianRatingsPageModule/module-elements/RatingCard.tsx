@@ -1,6 +1,6 @@
 "use client"
 
-import { format } from "date-fns"
+import { addHours, format, parseISO } from "date-fns"
 import { id } from "date-fns/locale"
 import { useAuthContext } from "@/components/contexts/AuthContext"
 import { Card, CardContent } from "@/components/ui/card"
@@ -22,7 +22,7 @@ export default function RatingCard({ rating }: { rating: RatingWithTechnicianDat
           <div>
             <div className="font-semibold">{rating.user?.identity?.fullName}</div>
             <div className="text-muted-foreground text-sm">
-              {format(new Date(rating.updatedAt), "dd MMMM yyyy HH:mm", { locale: id })}
+              {format(addHours(parseISO(rating.updatedAt), 7), "dd MMMM yyyy HH:mm", { locale: id })}
             </div>
           </div>
 
