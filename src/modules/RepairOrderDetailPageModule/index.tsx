@@ -4,11 +4,11 @@ import { UUID } from "crypto"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { AuthClient } from "@/lib/grpc"
 import MainRepairOrderDetailSection from "./sections/MainRepairOrderDetailSection"
+import { CouponResponseInterface } from "../ManageCouponsPageModule/interface"
 import {
   RepairOrderResponseInterface,
   RepairOrderWithTechnicianDataInterface,
 } from "../RepairOrderListModule/interface"
-import { CouponResponseInterface } from "../ManageCouponsPageModule/interface"
 
 export default async function RepairOrderDetailPageModule({ repairOrderId }: { repairOrderId: string }) {
   try {

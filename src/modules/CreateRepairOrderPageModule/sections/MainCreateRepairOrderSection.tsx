@@ -1,6 +1,6 @@
 import React from "react"
-import CreateRepairOrderForm from "../module-elements/CreateRepairOrderForm"
 import { PaymentMethodSummaryInterface } from "../interface"
+import CreateRepairOrderForm from "../module-elements/CreateRepairOrderForm"
 
 export default function MainCreateRepairOrderSection({
   paymentMethods,

@@ -2,18 +2,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import {
-  CalendarIcon,
-  CreditCard,
-  Smartphone,
   Building,
+  CalendarIcon,
+  Calendar as CalendarIconAlt,
+  CreditCard,
+  FileText,
+  Smartphone,
   Tag,
   Wrench,
-  FileText,
-  Calendar as CalendarIconAlt,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,15 +22,14 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { handleFormSubmission } from "@/components/utils/toast"
 import { cn } from "@/lib/utils"
+import { RepairOrderResponseInterface } from "@/modules/RepairOrderListModule/interface"
 import { createAndUpdateRepairOrderSchema } from "../constant"
 import { PaymentMethodSummaryInterface, PaymentMethodTypeEnum } from "../interface"
-import { RepairOrderResponseInterface } from "@/modules/RepairOrderListModule/interface"
 
 const getPaymentMethodIcon = (type: PaymentMethodTypeEnum) => {
   switch (type) {
