@@ -6,7 +6,7 @@ import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { del } from "@/components/utils/customFetch/serverFetchClients"
+import { del, post } from "@/components/utils/customFetch/serverFetchClients"
 import { handleFormSubmission } from "@/components/utils/toast"
 import UpdateTechnicianReportForm from "./UpdateTechnicianReportForm"
 import { TechnicianReport, TechnicianReportStatusEnum } from "../interface"
@@ -16,8 +16,12 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
   const [expanded, setExpanded] = useState(false)
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isStarting, setIsStarting] = useState(false)
+  const [isCompleting, setIsCompleting] = useState(false)
 
   const isDraft = report.status === TechnicianReportStatusEnum.DRAFT
+  const isApproved = report.status === TechnicianReportStatusEnum.APPROVED
+  const isInProgress = report.status === TechnicianReportStatusEnum.IN_PROGRESS
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this technician report? This action cannot be undone.")) {
@@ -42,6 +46,56 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
       }
     )
     setIsDeleting(false)
+  }
+
+  const handleStartWork = async () => {
+    if (!confirm("Are you sure you want to start working on this technician report?")) {
+      return
+    }
+
+    setIsStarting(true)
+    await handleFormSubmission(
+      () =>
+        post(`/api/v1/technician-reports/${report.reportId}/start`, undefined, {
+          toAuthBackend: false,
+          isAuthorized: true,
+        }),
+      {
+        loading: "Starting work on technician report...",
+        success: "Successfully started work on technician report!",
+        error: "Failed to start work on technician report",
+        router,
+        onSuccess: () => {
+          router.refresh()
+        },
+      }
+    )
+    setIsStarting(false)
+  }
+
+  const handleCompleteWork = async () => {
+    if (!confirm("Are you sure you want to complete this technician report?")) {
+      return
+    }
+
+    setIsCompleting(true)
+    await handleFormSubmission(
+      () =>
+        post(`/api/v1/technician-reports/${report.reportId}/complete`, undefined, {
+          toAuthBackend: false,
+          isAuthorized: true,
+        }),
+      {
+        loading: "Completing technician report...",
+        success: "Successfully completed technician report!",
+        error: "Failed to complete technician report",
+        router,
+        onSuccess: () => {
+          router.refresh()
+        },
+      }
+    )
+    setIsCompleting(false)
   }
 
   const handleUpdateSuccess = () => {
@@ -114,10 +168,27 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
             <p>
               <strong>Estimated Time:</strong> {formatTimeEstimate(report.estimatedTimeSeconds)}
             </p>
-            {!isDraft && (
-              <div className="pt-3">
-                <Button variant="secondary" className="w-full">
-                  Take Action
+            {isApproved && (
+              <div className="pt-3" onClick={(e) => e.stopPropagation()}>
+                <Button
+                  variant="default"
+                  className="w-full bg-green-600 hover:bg-green-700"
+                  onClick={handleStartWork}
+                  disabled={isStarting}
+                >
+                  {isStarting ? "Starting Work..." : "Start Work"}
+                </Button>
+              </div>
+            )}
+            {isInProgress && (
+              <div className="pt-3" onClick={(e) => e.stopPropagation()}>
+                <Button
+                  variant="default"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  onClick={handleCompleteWork}
+                  disabled={isCompleting}
+                >
+                  {isCompleting ? "Completing Work..." : "Complete Work"}
                 </Button>
               </div>
             )}
