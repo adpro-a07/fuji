@@ -14,8 +14,6 @@ export default function RatingsSection({
 }) {
   return (
     <div className="pt-16 px-6">
-      {/*<h1 className="text-2xl font-bold mb-6">Technician Ratings</h1>*/}
-
       {ratings.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <p>No ratings found for this technician.</p>

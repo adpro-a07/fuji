@@ -1,6 +1,6 @@
 "use client"
 
-import { formatDistanceToNow } from "date-fns"
+import { format } from "date-fns"
 import { id } from "date-fns/locale"
 import { useAuthContext } from "@/components/contexts/AuthContext"
 import { Card, CardContent } from "@/components/ui/card"
@@ -22,10 +22,7 @@ export default function RatingCard({ rating }: { rating: RatingWithTechnicianDat
           <div>
             <div className="font-semibold">{rating.user?.identity?.fullName}</div>
             <div className="text-sm text-muted-foreground">
-              {formatDistanceToNow(new Date(rating.updatedAt), {
-                addSuffix: true,
-                locale: id,
-              })}
+              {format(new Date(rating.updatedAt), "dd MMMM yyyy HH:mm", { locale: id })}
             </div>
           </div>
 
