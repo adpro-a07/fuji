@@ -31,7 +31,7 @@ export default function CreateRepairOrderForm() {
       issueDescription: "",
       desiredServiceDate: defaultDesiredServiceDate,
       paymentMethodId: "",
-      couponId: "",
+      couponCode: "",
     },
   })
 
@@ -143,12 +143,12 @@ export default function CreateRepairOrderForm() {
         />
         <FormField
           control={form.control}
-          name="couponId"
+          name="couponCode"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Coupon ID</FormLabel>
               <FormControl>
-                <Input placeholder="UUID" {...field} value={field.value ?? ""} />
+                <Input placeholder="Ex: SUMMER2024" {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>

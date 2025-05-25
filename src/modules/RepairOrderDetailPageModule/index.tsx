@@ -8,6 +8,7 @@ import {
   RepairOrderResponseInterface,
   RepairOrderWithTechnicianDataInterface,
 } from "../RepairOrderListModule/interface"
+import { CouponResponseInterface } from "../ManageCouponsPageModule/interface"
 
 export default async function RepairOrderDetailPageModule({ repairOrderId }: { repairOrderId: string }) {
   try {
@@ -20,7 +21,7 @@ export default async function RepairOrderDetailPageModule({ repairOrderId }: { r
 
     const authClient = AuthClient.getInstance()
 
-    // Get the technician ids
+    // Get the technician id
     const technicianDataResponse = await authClient.lookupUserById(repairOrderResponse.data?.technicianId as UUID)
 
     if (technicianDataResponse.error) throw new Error(technicianDataResponse.error.message)
@@ -32,10 +33,24 @@ export default async function RepairOrderDetailPageModule({ repairOrderId }: { r
       technician: technicianDataResponse.data.userData!,
     }
 
+    let coupon: CouponResponseInterface | null = null
+    if (repairOrder.couponId) {
+      const couponId = repairOrder.couponId
+      const couponResponse = await get<CouponResponseInterface>(`/api/v1/coupons/${couponId}`, {
+        isAuthorized: true,
+      })
+
+      if (!couponResponse.success) {
+        throw new Error(couponResponse.message)
+      }
+
+      coupon = couponResponse.data || null
+    }
+
     return (
       <section>
         <div className="pt-16">
-          <MainRepairOrderDetailSection repairOrder={repairOrder} />
+          <MainRepairOrderDetailSection repairOrder={repairOrder} coupon={coupon} />
         </div>
       </section>
     )
