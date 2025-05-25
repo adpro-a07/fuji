@@ -26,7 +26,7 @@ export default function MainPaymentMethodDetailSection({ paymentMethod }: { paym
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => router.push("/payment-methods")}
+        onClick={() => router.push("/admin/payment-methods")}
         className="flex items-center gap-1"
       >
         <ArrowLeft className="h-4 w-4" />

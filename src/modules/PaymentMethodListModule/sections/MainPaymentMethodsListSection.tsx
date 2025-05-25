@@ -15,7 +15,7 @@ export default function MainPaymentMethodsListSection({ paymentMethods }: { paym
     <div className="m-2 rounded-xl p-5">
       <div className="mb-4 flex justify-end">
         {isAdmin && (
-          <Link href="/payment-methods/create">
+          <Link href="/admin/payment-methods/create">
             <Button className="w-fit">Add Payment Method</Button>
           </Link>
         )}

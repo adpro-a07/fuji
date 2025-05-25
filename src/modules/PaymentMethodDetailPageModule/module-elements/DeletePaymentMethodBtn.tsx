@@ -14,7 +14,7 @@ export default function DeletePaymentMethodBtn({ id }: { id: string }) {
     if (!confirmed) return
 
     await toastHandlers.delete(() => del(`/api/v1/payment-methods/${id}`, { isAuthorized: true }), {
-      onSuccess: () => router.push("/payment-methods"),
+      onSuccess: () => router.push("/admin/payment-methods"),
     })
   }
 

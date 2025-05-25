@@ -44,7 +44,7 @@ export default function CreatePaymentMethodForm() {
         loading: "Creating payment method...",
         success: "Payment method created successfully!",
         error: "Failed to create payment method",
-        redirectTo: "/payment-methods",
+        redirectTo: "/admin/payment-methods",
         router,
       }
     )

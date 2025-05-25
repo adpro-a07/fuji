@@ -17,7 +17,7 @@ export default function PaymentMethodCard({ method }: Props) {
   const icon = typeIcons[method.type] ?? <Wallet className="text-gray-500" />
 
   return (
-    <Link href={`/payment-methods/${method.id}`} className="block">
+    <Link href={`/admin/payment-methods/${method.id}`} className="block">
       <Card className="cursor-pointer transition-shadow hover:shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">

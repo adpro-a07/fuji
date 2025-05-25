@@ -53,7 +53,7 @@ export default function EditPaymentMethodModal({ paymentMethod }: { paymentMetho
         loading: "Updating...",
         success: "Payment method updated!",
         error: "Failed to update payment method.",
-        redirectTo: `/payment-methods/${paymentMethod.id}`,
+        redirectTo: `/admin/payment-methods/${paymentMethod.id}`,
         router,
         onSuccess: () => setOpen(false),
       }
