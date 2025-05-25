@@ -6,6 +6,7 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { post } from "@/components/utils/customFetch/serverFetchClients"
 import { handleFormSubmission } from "@/components/utils/toast"
 
@@ -60,9 +61,17 @@ export default function CreatePaymentMethodForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Payment Type</FormLabel>
-              <FormControl>
-                <Input placeholder="Ex: BANK_TRANSFER or E_WALLET" {...field} />
-              </FormControl>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
+                  <SelectItem value="E_WALLET">E-Wallet</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

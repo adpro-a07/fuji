@@ -1,5 +1,5 @@
 "use client"
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -94,13 +94,22 @@ export default function EditPaymentMethodModal({ paymentMethod }: { paymentMetho
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Type</FormLabel>
-                  <FormControl>
-                    <Input placeholder="BANK_TRANSFER or E_WALLET" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
+                      <SelectItem value="E_WALLET">E-Wallet</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="accountName"
