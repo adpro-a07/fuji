@@ -11,7 +11,7 @@ export default function ReportCard({
 }) {
   const technicianName = technicianNames[report.technicianId] || report.technicianId
   return (
-    <Link href={`/admin/reports/${report.id}`} className="block">
+    <Link href={`/admin/technicians/reports/${report.id}`} className="block">
       <Card className="transition-shadow hover:shadow-lg">
         <CardHeader>
           <CardTitle>

@@ -9,7 +9,7 @@ interface Props {
   technicianNames?: Record<string, string>
 }
 
-export default function MainReportDetailSection({ report, technicianNames = {} }: Props) {
+export default function MainTechnicianReportDetailSection({ report, technicianNames = {} }: Props) {
   const router = useRouter()
 
   return (

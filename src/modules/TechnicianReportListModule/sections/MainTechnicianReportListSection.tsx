@@ -2,7 +2,7 @@ import React from "react"
 import { ReportResponseInterface } from "../interface"
 import ReportCard from "../module-elements/ReportCard"
 
-export default function MainReportListSection({
+export default function MainTechnicianReportListSection({
   reports,
   technicianNames = {},
 }: {

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { ReportResponseInterface } from "./interface"
-import MainReportListSection from "./sections/MainReportListSection"
+import MainTechnicianReportListSection from "./sections/MainTechnicianReportListSection"
 import { AuthClient } from "@/lib/grpc"
 import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
@@ -31,7 +31,7 @@ export default async function ReportListModule() {
     return (
       <section>
         <div className="pt-16">
-          <MainReportListSection reports={reports} technicianNames={technicianNames} />
+          <MainTechnicianReportListSection reports={reports} technicianNames={technicianNames} />
         </div>
       </section>
     )

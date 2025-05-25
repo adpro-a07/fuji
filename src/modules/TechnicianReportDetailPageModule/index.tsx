@@ -1,7 +1,7 @@
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
-import { ReportResponseInterface } from "@/modules/ReportListModule/interface"
-import MainReportDetailSection from "./sections/MainReportDetailSection"
+import { ReportResponseInterface } from "@/modules/TechnicianReportListModule/interface"
+import MainTechnicianReportDetailSection from "./sections/MainTechnicianReportDetailSection"
 import { AuthClient } from "@/lib/grpc"
 import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
@@ -33,7 +33,7 @@ export default async function ReportDetailPageModule({ reportId }: Props) {
 
   return (
     <section className="m-20 mx-auto max-w-6xl p-8">
-      <MainReportDetailSection report={report} technicianNames={technicianNames} />
+      <MainTechnicianReportDetailSection report={report} technicianNames={technicianNames} />
     </section>
   )
 }

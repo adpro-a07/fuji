@@ -40,14 +40,22 @@ export function MainAdminSection({
     <div className="bg-background text-foreground flex min-h-screen flex-col items-center p-6">
       <h2 className="mb-6 text-2xl font-semibold">Admin Panel</h2>
 
-      {/* Buttons for managing coupons and viewing reports */}
-      <div className="mb-6 flex space-x-4">
-        <Button asChild>
-          <Link href="/admin/reports">View All Reports</Link>
-        </Button>
-        <Button asChild>
-          <Link href="/admin/coupons">Manage Coupons</Link>
-        </Button>
+      {/* Buttons for managing technicians, reports and coupons wrapped to match card width */}
+      <div className="mb-6 flex w-full max-w-4xl justify-center">
+        <div className="flex space-x-4">
+          <Button asChild>
+            <Link href="/admin/technicians">View Technicians</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/admin/technicians/register">Register Technician</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/admin/technicians/reports">View All Technician Reports</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/admin/coupons">Manage Coupons</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="mb-2 flex w-full max-w-4xl flex-wrap justify-center gap-6">
@@ -83,7 +91,6 @@ export function MainAdminSection({
           {topTechnicians.length > 0 ? (
             <ol className="list-decimal pl-5 font-medium">
               {topTechnicians.map(([technicianId, count]) => {
-                // Show technician name if available, otherwise fallback to ID
                 const name = technicianNames[technicianId] || `Technician ID: ${technicianId}`
                 return (
                   <li key={technicianId} className="mb-2">
