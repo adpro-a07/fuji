@@ -32,6 +32,7 @@ ENV KILIMANJARO_GRPC_URL=$KILIMANJARO_GRPC_URL
 ENV EVEREST_URL=$EVEREST_URL
 
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/src/proto/generated ./src/proto/generated
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
