@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation"
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
-import MainPaymentMethodDetailSection from "./sections/MainPaymentMethodDetailSection"
 import { PaymentMethodDetail } from "./interface"
+import MainPaymentMethodDetailSection from "./sections/MainPaymentMethodDetailSection"
 
 export default async function PaymentMethodDetailPageModule({ paymentMethodId }: { paymentMethodId: string }) {
   try {
@@ -10,7 +10,7 @@ export default async function PaymentMethodDetailPageModule({ paymentMethodId }:
     const response = await get<PaymentMethodDetail>(`/api/v1/payment-methods/${paymentMethodId}`, {
       isAuthorized: true,
     })
-    console.log("Payment Method API response:", response)
+
     if (!response.success || !response.data) {
       throw new Error("Failed to load payment method data")
     }
@@ -22,6 +22,6 @@ export default async function PaymentMethodDetailPageModule({ paymentMethodId }:
     )
   } catch (error) {
     console.error(error)
-    redirect("/payment-methods")
+    redirect("/admin/payment-methods")
   }
 }
