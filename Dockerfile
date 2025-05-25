@@ -10,6 +10,8 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+COPY proto ./proto
+
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -21,7 +23,16 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+ARG KILIMANJARO_URL
+ARG KILIMANJARO_GRPC_URL
+ARG EVEREST_URL
+ENV KILIMANJARO_URL=$KILIMANJARO_URL
+ENV KILIMANJARO_GRPC_URL=$KILIMANJARO_GRPC_URL
+ENV EVEREST_URL=$EVEREST_URL
+
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/src/proto/generated ./src/proto/generated
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -56,9 +67,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 80
+EXPOSE 3000
 
-ENV PORT=80
+ENV PORT=3000
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output

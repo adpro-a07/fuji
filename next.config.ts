@@ -1,7 +1,7 @@
 import withBundleAnalyzer from "@next/bundle-analyzer"
-import { type NextConfig } from "next"
 
 import { env } from "./env.mjs"
+import { NextConfig } from "next"
 
 const config: NextConfig = {
   reactStrictMode: true,
@@ -19,6 +19,9 @@ const config: NextConfig = {
 }
 
 module.exports = {
+  experimental: {
+    nodeMiddleware: true,
+  },
   output: "standalone",
 }
 
