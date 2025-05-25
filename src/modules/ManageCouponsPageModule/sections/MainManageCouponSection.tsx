@@ -6,7 +6,7 @@ import CouponCard from "../module-elements/CouponCard"
 
 export default function MainManageCouponSection({ coupons }: { coupons: CouponResponseInterface[] }) {
   return (
-    <div className="m-2 rounded-xl p-5">
+    <div className="m-4 rounded-xl p-5">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-semibold">Manage Coupons</h2>
         <Button asChild>
