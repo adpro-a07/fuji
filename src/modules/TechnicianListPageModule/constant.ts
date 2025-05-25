@@ -1,0 +1,1 @@
+export const TECHNICIAN_LIST_PAGE_SIZE = 8

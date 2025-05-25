@@ -3,9 +3,7 @@ name: Check
 on:
   push:
     branches:
-      - main
-      - staging
-      - development
+      - "**"
   pull_request:
   workflow_dispatch:
 

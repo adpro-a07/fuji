@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import { Noto_Sans_Mono } from "next/font/google"
 import { UUID } from "crypto"
 import { AuthContextProvider } from "@/components/contexts/AuthContext"
@@ -13,20 +14,27 @@ const noto_sans_mono = Noto_Sans_Mono({
   subsets: ["latin"],
 })
 
+export const metadata: Metadata = {
+  title: "PerbaikiinAja",
+  twitter: {
+    card: "summary_large_image",
+  },
+}
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const grpcUserData = await useUserServer()
 
   const user: User | null =
     grpcUserData && grpcUserData.identity && grpcUserData.profile
       ? {
-          id: grpcUserData.identity.id as UUID,
-          email: grpcUserData.identity.email,
-          fullName: grpcUserData.identity.fullName,
-          phoneNumber: grpcUserData.identity.phoneNumber,
-          role: convertGrpcRoleToUserRole(grpcUserData.identity.role),
-          address: grpcUserData.profile.address,
-          experience: grpcUserData.profile.workExperience,
-          totalJobsDone: grpcUserData.profile.totalJobsDone,
+          id: grpcUserData.identity.id! as UUID,
+          email: grpcUserData.identity.email!,
+          fullName: grpcUserData.identity.fullName!,
+          phoneNumber: grpcUserData.identity.phoneNumber!,
+          role: convertGrpcRoleToUserRole(grpcUserData.identity.role!),
+          address: grpcUserData.profile.address!,
+          experience: grpcUserData.profile.workExperience!,
+          totalJobsDone: grpcUserData.profile.totalJobsDone!,
           totalIncome: Number(grpcUserData.profile.totalIncome),
           createdAt: convertTimestampToString(grpcUserData.identity.createdAt!),
           updatedAt: convertTimestampToString(grpcUserData.identity.updatedAt!),

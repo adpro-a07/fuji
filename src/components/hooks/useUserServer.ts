@@ -1,6 +1,6 @@
 import { getCookie } from "cookies-next/server"
 import { cookies } from "next/headers"
-import { AuthClientService } from "../utils/grpcClient/grpc-service"
+import { AuthClient } from "@/lib/grpc/auth-service"
 
 export default async function useUserServer() {
   const access = await getCookie("kilimanjaro-access", { cookies })
@@ -9,13 +9,18 @@ export default async function useUserServer() {
   }
 
   try {
-    const authService = new AuthClientService()
+    const authClient = AuthClient.getInstance()
+    const { data, error } = await authClient.validateToken(access)
 
-    const { client } = await authService.callValidateToken(access)
+    if (error) {
+      console.error("Auth error: ", error.message)
+    }
 
-    if (!client?.valid) return null
+    if (!data || !data.userData) {
+      return null
+    }
 
-    return client.userData
+    return data.userData
   } catch {
     return null
   }

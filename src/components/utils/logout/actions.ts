@@ -1,13 +1,17 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
+import { StructuredResponse } from "../customFetch/interface"
 
-export const logoutAction = async () => {
+export const logoutAction = async (): Promise<StructuredResponse<unknown>> => {
   const cookieStore = await cookies()
 
   cookieStore.delete("kilimanjaro-access")
   cookieStore.delete("kilimanjaro-refresh")
 
-  redirect("/login")
+  return {
+    success: true,
+    message: "Successfully logged out",
+    data: null,
+  }
 }

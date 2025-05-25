@@ -2,17 +2,21 @@
 
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
-import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { useAuthContext } from "../contexts/AuthContext"
+import { UserRole } from "../contexts/AuthContext/interface"
+import { post } from "../utils/customFetch/serverFetchClients"
 import { logoutAction } from "../utils/logout/actions"
+import { handleFormSubmission } from "../utils/toast"
 
 function NavbarContent() {
   const [isOpen, setIsOpen] = useState(false)
   const { user, setIsAuthenticated, setStoredUser } = useAuthContext()
+  const router = useRouter()
 
   const searchParams = useSearchParams()
   useEffect(() => {
@@ -27,23 +31,21 @@ function NavbarContent() {
   }, [searchParams])
 
   const handleLogout: () => void = async () => {
-    toast.promise(
-      (async () => {
-        try {
-          await logoutAction()
-        } catch (error) {
-          console.log(error)
-        }
-      })(),
+    await handleFormSubmission(
+      () =>
+        post(`/api/v1/auth/logout`, null, {
+          toAuthBackend: true,
+          isAuthorized: true,
+        }).then(() => logoutAction()),
       {
         loading: "Logging out...",
-        success: () => {
+        success: "Successfully logged out!",
+        error: "Failed to logout",
+        redirectTo: "/",
+        router: router,
+        onSuccess: async () => {
           setIsAuthenticated(false)
           setStoredUser(null)
-          return "Successfully logged out!"
-        },
-        error: () => {
-          return "Failed to log out."
         },
       }
     )
@@ -52,9 +54,21 @@ function NavbarContent() {
   return (
     <nav className="fixed top-0 right-0 left-0 z-10 w-full border-b border-transparent bg-white shadow-md dark:border-white dark:bg-slate-950">
       <div className="flex items-center justify-between px-5 py-3">
-        <Link href="/" className="text-xl font-bold">
-          PerbaikiinAja
-        </Link>
+        <div className="flex items-center">
+          <Link href="/" className="text-xl font-bold">
+            PerbaikiinAja
+          </Link>
+          {user && user.role === UserRole.ADMIN && (
+            <Link href="/admin" style={{ marginLeft: 32 }}>
+              <Badge
+                variant="outline"
+                className="hover:bg-accent hover:text-accent-foreground cursor-pointer text-lg font-semibold transition-colors"
+              >
+                Admin Dashboard
+              </Badge>
+            </Link>
+          )}
+        </div>
 
         {/* Desktop */}
         <div className="hidden h-full items-center space-x-4 md:flex">
@@ -91,6 +105,23 @@ function NavbarContent() {
       {/* Mobile Dropdown */}
       {isOpen && (
         <div className="mb-2 flex flex-col space-y-2 border-t p-2 md:hidden">
+          <div className="mb-2 flex flex-col items-start space-y-1">
+            <div className="mb-2 flex flex-col items-start space-y-1">
+              <Link href="/" className="text-xl font-bold">
+                PerbaikiinAja
+              </Link>
+              {user && user.role === UserRole.ADMIN && (
+                <Link href="/admin" style={{ marginTop: 5 }}>
+                  <Badge
+                    variant="outline"
+                    className="hover:bg-accent hover:text-accent-foreground cursor-pointer text-lg font-semibold transition-colors"
+                  >
+                    Admin Dashboard
+                  </Badge>
+                </Link>
+              )}
+            </div>
+          </div>
           {user ? (
             <>
               <span className="ml-1 text-sm font-medium">
