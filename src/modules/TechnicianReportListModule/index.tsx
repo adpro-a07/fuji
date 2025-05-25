@@ -6,7 +6,7 @@ import MainTechnicianReportListSection from "./sections/MainTechnicianReportList
 import { AuthClient } from "@/lib/grpc"
 import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
-export default async function ReportListModule() {
+export default async function TechnicianReportListModule() {
   try {
     const reportsResponse = await get<ReportResponseInterface[]>("/api/v1/admin/reports", {
       isAuthorized: true,

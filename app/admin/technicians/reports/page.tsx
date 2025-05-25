@@ -1,6 +1,6 @@
 import React from "react"
-import ReportListModule from "src/modules/TechnicianReportListModule"
+import TechnicianReportListModule from "src/modules/TechnicianReportListModule"
 
 export default function Page() {
-  return <ReportListModule />
+  return <TechnicianReportListModule />
 }
