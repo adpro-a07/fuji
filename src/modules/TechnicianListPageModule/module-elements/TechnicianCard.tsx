@@ -1,7 +1,7 @@
+import Link from "next/link"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserData"
-import Link from "next/link"
 
 export function TechnicianCard({ technician, isVerbose }: { technician: UserData; isVerbose: boolean }) {
   const { identity, profile } = technician
