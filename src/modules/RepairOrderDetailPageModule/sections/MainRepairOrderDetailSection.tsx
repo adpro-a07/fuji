@@ -34,10 +34,10 @@ const getStatusColor = (status: string) => {
 export default function MainRepairOrderDetailSection({
   repairOrder,
   coupon,
-}: {
+}: Readonly<{
   repairOrder: RepairOrderWithTechnicianDataInterface
   coupon: CouponResponseInterface | null
-}) {
+}>) {
   const icon = statusIcons[repairOrder.status] ?? statusIcons.DEFAULT
   const { technician, ...repairOrderWithoutTechnician } = repairOrder
   const showActions = repairOrder.status === "PENDING_CONFIRMATION"

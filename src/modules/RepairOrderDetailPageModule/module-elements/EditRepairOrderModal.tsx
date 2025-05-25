@@ -31,11 +31,11 @@ import { RepairOrderWithoutTechnicianData } from "../interface"
 export default function EditRepairOrderModal({
   repairOrder,
   coupon,
-}: {
+}: Readonly<{
   repairOrder: RepairOrderWithoutTechnicianData
 
   coupon: CouponResponseInterface | null
-}) {
+}>) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
@@ -47,7 +47,7 @@ export default function EditRepairOrderModal({
       issueDescription: repairOrder.issueDescription,
       desiredServiceDate: new Date(repairOrder.desiredServiceDate),
       paymentMethodId: repairOrder.paymentMethodId,
-      couponCode: coupon?.code || "",
+      couponCode: coupon?.code ?? "",
     },
   })
 

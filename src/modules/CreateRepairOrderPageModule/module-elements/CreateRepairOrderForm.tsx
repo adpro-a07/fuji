@@ -53,7 +53,9 @@ const getPaymentMethodLabel = (type: PaymentMethodTypeEnum) => {
   }
 }
 
-export default function CreateRepairOrderForm({ paymentMethods }: { paymentMethods: PaymentMethodSummaryInterface[] }) {
+export default function CreateRepairOrderForm({
+  paymentMethods,
+}: Readonly<{ paymentMethods: PaymentMethodSummaryInterface[] }>) {
   const router = useRouter()
 
   const defaultDesiredServiceDate = new Date()
