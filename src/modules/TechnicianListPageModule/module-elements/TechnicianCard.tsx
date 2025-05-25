@@ -6,11 +6,11 @@ import { UserData } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth
 export function TechnicianCard({ technician, isVerbose }: { technician: UserData; isVerbose: boolean }) {
   const { identity, profile } = technician
 
-  const formatRupiah = (value: number | string) => {
-    return new Intl.NumberFormat("id-ID", {
+  const formatDollar = (value: number | string) => {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
+      currency: "USD",
+      minimumFractionDigits: 2,
     }).format(Number(value))
   }
 
@@ -47,7 +47,7 @@ export function TechnicianCard({ technician, isVerbose }: { technician: UserData
                 <strong>Email:</strong> {identity?.email}
               </p>
               <p>
-                <strong>Total Income:</strong> {formatRupiah(profile?.totalIncome?.toString() || 0)}
+                <strong>Total Income:</strong> {formatDollar(profile?.totalIncome?.toString() || 0)}
               </p>
             </>
           )}
