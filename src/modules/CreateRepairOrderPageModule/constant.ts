@@ -16,5 +16,5 @@ export const createAndUpdateRepairOrderSchema = z.object({
     )
   ),
   paymentMethodId: z.string().uuid(),
-  couponId: z.preprocess((val) => (val === "" ? null : val), z.string().uuid().nullable().optional()),
+  couponCode: z.preprocess((val) => (val === "" ? null : val), z.string().nullable().optional()),
 })

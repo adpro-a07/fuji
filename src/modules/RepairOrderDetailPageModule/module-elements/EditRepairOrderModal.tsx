@@ -25,9 +25,17 @@ import { put } from "@/components/utils/customFetch/serverFetchClients"
 import { handleFormSubmission } from "@/components/utils/toast"
 import { cn } from "@/lib/utils"
 import { createAndUpdateRepairOrderSchema } from "@/modules/CreateRepairOrderPageModule/constant"
+import { CouponResponseInterface } from "@/modules/ManageCouponsPageModule/interface"
 import { RepairOrderWithoutTechnicianData } from "../interface"
 
-export default function EditRepairOrderModal({ repairOrder }: { repairOrder: RepairOrderWithoutTechnicianData }) {
+export default function EditRepairOrderModal({
+  repairOrder,
+  coupon,
+}: Readonly<{
+  repairOrder: RepairOrderWithoutTechnicianData
+
+  coupon: CouponResponseInterface | null
+}>) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
@@ -39,7 +47,7 @@ export default function EditRepairOrderModal({ repairOrder }: { repairOrder: Rep
       issueDescription: repairOrder.issueDescription,
       desiredServiceDate: new Date(repairOrder.desiredServiceDate),
       paymentMethodId: repairOrder.paymentMethodId,
-      couponId: repairOrder.couponId || "",
+      couponCode: coupon?.code ?? "",
     },
   })
 
@@ -167,12 +175,12 @@ export default function EditRepairOrderModal({ repairOrder }: { repairOrder: Rep
             />
             <FormField
               control={form.control}
-              name="couponId"
+              name="couponCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Coupon ID</FormLabel>
+                  <FormLabel>Coupon Code</FormLabel>
                   <FormControl>
-                    <Input placeholder="UUID" {...field} value={field.value ?? ""} />
+                    <Input placeholder="Ex: SUMMER2024" {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
