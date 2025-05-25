@@ -15,13 +15,14 @@ export default async function CustomerTechnicianReportModule({ status }: { statu
       isAuthorized: true,
     })
 
-    if (!response.success && response.message != "No technician report submissions found") throw new Error(response.message)
+    if (!response.success && response.message != "No technician report submissions found")
+      throw new Error(response.message)
 
     return (
-        <MainCustomerTechnicianReportListSection
-            reports={response.data!}
-            status={(status || "SUBMITTED") as TechnicianReportStatusEnum}
-        />
+      <MainCustomerTechnicianReportListSection
+        reports={response.data!}
+        status={(status || "SUBMITTED") as TechnicianReportStatusEnum}
+      />
     )
   } catch (error) {
     console.log(error)
