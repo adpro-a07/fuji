@@ -104,7 +104,7 @@ export default function CouponCard({ coupon }: { coupon: CouponResponseInterface
           </CardTitle>
           <CardDescription className="relative z-10 text-base">
             <div className="text-lg font-semibold text-green-600 dark:text-green-400">
-              {formatCurrency(coupon.discountAmount)}
+              -{formatCurrency(coupon.discountAmount)}
             </div>
             <div className="flex items-center space-x-2">
               <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
