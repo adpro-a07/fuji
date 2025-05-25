@@ -152,6 +152,22 @@ export function MainAdminSection({
                   <span>Manage Coupons</span>
                 </Link>
               </Button>
+              <Button
+                asChild
+                className="h-12 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md transition-all duration-300 hover:from-teal-600 hover:to-teal-700 hover:shadow-lg"
+              >
+                <Link href="/admin/payment-methods" className="flex items-center justify-center space-x-2">
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
+                  </svg>
+                  <span>Payment Methods</span>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
