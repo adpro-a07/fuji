@@ -1,6 +1,6 @@
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
-import { ReportResponseInterface } from "@/modules/TechnicianReportListModule/interface"
+import { ReportResponseInterface } from "@/modules/AdminTechnicianReportListModule/interface"
 import MainTechnicianReportDetailSection from "./sections/MainTechnicianReportDetailSection"
 import { AuthClient } from "@/lib/grpc"
 import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"

@@ -1,5 +1,5 @@
 import React from "react"
-import TechnicianReportListModule from "src/modules/TechnicianReportListModule"
+import TechnicianReportListModule from "src/modules/AdminTechnicianReportListModule"
 
 export default function Page() {
   return <TechnicianReportListModule />
