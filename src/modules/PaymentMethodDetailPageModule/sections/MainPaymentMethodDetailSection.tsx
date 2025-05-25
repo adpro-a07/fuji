@@ -1,15 +1,14 @@
 "use client"
 
-import React, { JSX } from "react"
+import { ArrowLeft, Banknote, Wallet } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { Banknote, Wallet } from "lucide-react"
-import { ArrowLeft } from "lucide-react"
+import React, { JSX } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PaymentMethodDetail } from "../interface"
-import EditPaymentMethodModal from "../module-elements/EditPaymentMethodModal"
 import DeletePaymentMethodBtn from "../module-elements/DeletePaymentMethodBtn"
+import EditPaymentMethodModal from "../module-elements/EditPaymentMethodModal"
 
 const typeIcons: Record<string, JSX.Element> = {
   BANK_TRANSFER: <Banknote className="text-blue-500" />,
