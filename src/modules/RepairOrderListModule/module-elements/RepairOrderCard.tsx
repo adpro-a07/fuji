@@ -25,9 +25,9 @@ export default function RepairOrderCard({ repair_order }: { repair_order: Repair
           <Button
             size="sm"
             variant="secondary"
-            className="flex items-center space-x-1 transition-colors hover:bg-gray-200 hover:text-primary dark:hover:bg-gray-800"
+            className="hover:text-primary flex items-center space-x-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-800"
           >
-            <Star className="w-4 h-4" />
+            <Star className="h-4 w-4" />
             <span>Beri Rating</span>
           </Button>
         </Link>

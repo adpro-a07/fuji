@@ -2,10 +2,7 @@
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
 import { AuthClient } from "@/lib/grpc"
-import {
-  RatingResponseInterface,
-  RatingWithTechnicianDataInterface,
-} from "./interface"
+import { RatingResponseInterface, RatingWithTechnicianDataInterface } from "./interface"
 import RatingsSection from "./sections/RatingsSection"
 
 interface TechnicianData {
@@ -17,9 +14,9 @@ interface TechnicianData {
 }
 
 export default async function TechnicianRatingsPageModule({
-                                                            technicianId,
-                                                            currentPage,
-                                                          }: {
+  technicianId,
+  currentPage,
+}: {
   technicianId: string
   currentPage: number
   searchQuery?: string

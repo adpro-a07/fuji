@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { Star } from "lucide-react";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { Star } from "lucide-react"
+import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 interface StarRatingProps {
-  value: number;
-  onChange: (val: number) => void;
+  value: number
+  onChange: (val: number) => void
 }
 
 export default function StarRating({ value, onChange }: StarRatingProps) {
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null)
 
   return (
     <div className="flex items-center space-x-1">
@@ -18,7 +18,7 @@ export default function StarRating({ value, onChange }: StarRatingProps) {
         <Star
           key={star}
           className={cn(
-            "w-6 h-6 cursor-pointer transition-colors",
+            "h-6 w-6 cursor-pointer transition-colors",
             (hovered ?? value) >= star ? "text-yellow-400" : "text-gray-300"
           )}
           onMouseEnter={() => setHovered(star)}
@@ -28,5 +28,5 @@ export default function StarRating({ value, onChange }: StarRatingProps) {
         />
       ))}
     </div>
-  );
+  )
 }

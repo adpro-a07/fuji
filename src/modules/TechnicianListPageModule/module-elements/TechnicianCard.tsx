@@ -54,10 +54,7 @@ export function TechnicianCard({ technician, isVerbose }: { technician: UserData
         </div>
         <div className="flex items-center gap-2">
           {identity?.id && (
-            <Link
-              href={`/technicians/${identity.id}/ratings`}
-              className="text-sm text-blue-600 hover:underline"
-            >
+            <Link href={`/technicians/${identity.id}/ratings`} className="text-sm text-blue-600 hover:underline">
               View Ratings →
             </Link>
           )}

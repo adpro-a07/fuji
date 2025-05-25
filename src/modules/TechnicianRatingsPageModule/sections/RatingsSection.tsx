@@ -5,22 +5,22 @@ import { RatingWithTechnicianDataInterface } from "../interface"
 import RatingCard from "../module-elements/RatingCard"
 
 export default function RatingsSection({
-                                         ratings,
-                                         totalPages,
-                                       }: {
+  ratings,
+  totalPages,
+}: {
   ratings: RatingWithTechnicianDataInterface[]
   currentPage: number
   totalPages: number
 }) {
   return (
-    <div className="pt-16 px-6">
+    <div className="px-6 pt-16">
       {ratings.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="py-8 text-center text-gray-500">
           <p>No ratings found for this technician.</p>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
             {ratings.map((rating) => (
               <RatingCard key={rating.id} rating={rating} />
             ))}

@@ -11,6 +11,6 @@ export interface RatingResponseInterface {
 }
 
 export interface RatingWithTechnicianDataInterface extends Omit<RatingResponseInterface, "technicianId"> {
-  technician: UserData,
+  technician: UserData
   user: UserData
 }

@@ -16,12 +16,12 @@ export default function RatingCard({ rating }: { rating: RatingWithTechnicianDat
   const canDelete = isOwner || isAdmin
 
   return (
-    <Card className="shadow-md border rounded-lg">
+    <Card className="rounded-lg border shadow-md">
       <CardContent className="p-6">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="font-semibold">{rating.user?.identity?.fullName}</div>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-sm">
               {format(new Date(rating.updatedAt), "dd MMMM yyyy HH:mm", { locale: id })}
             </div>
           </div>
@@ -34,7 +34,7 @@ export default function RatingCard({ rating }: { rating: RatingWithTechnicianDat
           )}
         </div>
 
-        <div className="flex items-center mb-2">
+        <div className="mb-2 flex items-center">
           {Array.from({ length: rating.score }, (_, i) => (
             <span key={i}>⭐</span>
           ))}

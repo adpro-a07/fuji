@@ -48,7 +48,7 @@ export default function CreateRatingForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="space-y-6 rounded-xl border p-6 shadow-sm max-w-xl mx-auto">
+      <form onSubmit={onSubmit} className="mx-auto max-w-xl space-y-6 rounded-xl border p-6 shadow-sm">
         <h1 className="text-center text-2xl font-bold">Beri Rating Layanan</h1>
 
         <FormField
@@ -72,11 +72,7 @@ export default function CreateRatingForm() {
             <FormItem>
               <FormLabel>Komentar</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Bagikan pengalaman Anda..."
-                  maxLength={1000}
-                  {...field}
-                />
+                <Textarea placeholder="Bagikan pengalaman Anda..." maxLength={1000} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
