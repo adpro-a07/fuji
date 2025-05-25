@@ -10,6 +10,8 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+COPY proto ./proto
+
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -30,6 +32,7 @@ ENV KILIMANJARO_GRPC_URL=$KILIMANJARO_GRPC_URL
 ENV EVEREST_URL=$EVEREST_URL
 
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/src/proto/generated ./src/proto/generated
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
