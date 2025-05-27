@@ -12,6 +12,7 @@ const LandingPageModule = () => {
             PerbaikiinAja is your trusted partner for fast, reliable repair services. Whether it's your phone, laptop,
             or home appliance — request a repair in minutes, track the progress, and get it fixed without hassle.
           </p>
+          <p>Adpro A07 - Presentasi</p>
           <AuthActionButtons />
         </div>
         <div className="hidden w-full md:block md:w-2/5">
