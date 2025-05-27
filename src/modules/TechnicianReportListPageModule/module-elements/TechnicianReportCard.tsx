@@ -16,6 +16,7 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
   const [expanded, setExpanded] = useState(false)
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isStarting, setIsStarting] = useState(false)
   const [isCompleting, setIsCompleting] = useState(false)
 
@@ -48,6 +49,35 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
     setIsDeleting(false)
   }
 
+  const handleSubmitReport = async () => {
+    if (!confirm("Are you sure you want to submit this technician report? Once submitted, you cannot edit it.")) {
+      return
+    }
+
+    setIsSubmitting(true)
+    await handleFormSubmission(
+      () =>
+        post(
+          `/api/v1/technician-reports/${report.reportId}/submit`,
+          {},
+          {
+            toAuthBackend: false,
+            isAuthorized: true,
+          }
+        ),
+      {
+        loading: "Submitting technician report...",
+        success: "Technician report submitted successfully!",
+        error: "Failed to submit technician report",
+        router,
+        onSuccess: () => {
+          router.refresh()
+        },
+      }
+    )
+    setIsSubmitting(false)
+  }
+
   const handleStartWork = async () => {
     if (!confirm("Are you sure you want to start working on this technician report?")) {
       return
@@ -56,10 +86,14 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
     setIsStarting(true)
     await handleFormSubmission(
       () =>
-        post(`/api/v1/technician-reports/${report.reportId}/start`, undefined, {
-          toAuthBackend: false,
-          isAuthorized: true,
-        }),
+        post(
+          `/api/v1/technician-reports/${report.reportId}/start`,
+          {},
+          {
+            toAuthBackend: false,
+            isAuthorized: true,
+          }
+        ),
       {
         loading: "Starting work on technician report...",
         success: "Successfully started work on technician report!",
@@ -81,10 +115,14 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
     setIsCompleting(true)
     await handleFormSubmission(
       () =>
-        post(`/api/v1/technician-reports/${report.reportId}/complete`, undefined, {
-          toAuthBackend: false,
-          isAuthorized: true,
-        }),
+        post(
+          `/api/v1/technician-reports/${report.reportId}/complete`,
+          {},
+          {
+            toAuthBackend: false,
+            isAuthorized: true,
+          }
+        ),
       {
         loading: "Completing technician report...",
         success: "Successfully completed technician report!",
@@ -111,6 +149,62 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
       return `${hours} hour${hours > 1 ? "s" : ""} ${minutes > 0 ? `${minutes} minute${minutes > 1 ? "s" : ""}` : ""}`
     }
     return `${minutes} minute${minutes > 1 ? "s" : ""}`
+  }
+
+  const renderActionButton = () => {
+    if (isDraft) {
+      return (
+        <Button
+          variant="default"
+          className="w-full"
+          onClick={(e) => {
+            e.stopPropagation()
+            handleSubmitReport()
+          }}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Submit Report"}
+        </Button>
+      )
+    }
+
+    if (isApproved) {
+      return (
+        <Button
+          variant="default"
+          className="w-full bg-green-600 hover:bg-green-700"
+          onClick={(e) => {
+            e.stopPropagation()
+            handleStartWork()
+          }}
+          disabled={isStarting}
+        >
+          {isStarting ? "Starting Work..." : "Start Work"}
+        </Button>
+      )
+    }
+
+    if (isInProgress) {
+      return (
+        <Button
+          variant="default"
+          className="w-full bg-blue-600 hover:bg-blue-700"
+          onClick={(e) => {
+            e.stopPropagation()
+            handleCompleteWork()
+          }}
+          disabled={isCompleting}
+        >
+          {isCompleting ? "Completing Work..." : "Complete Work"}
+        </Button>
+      )
+    }
+
+    return (
+      <Button variant="secondary" className="w-full">
+        No Action Available
+      </Button>
+    )
   }
 
   return (
@@ -168,30 +262,9 @@ export default function TechnicianReportCard({ report }: { report: TechnicianRep
             <p>
               <strong>Estimated Time:</strong> {formatTimeEstimate(report.estimatedTimeSeconds)}
             </p>
-            {isApproved && (
-              <div className="pt-3" onClick={(e) => e.stopPropagation()}>
-                <Button
-                  variant="default"
-                  className="w-full bg-green-600 hover:bg-green-700"
-                  onClick={handleStartWork}
-                  disabled={isStarting}
-                >
-                  {isStarting ? "Starting Work..." : "Start Work"}
-                </Button>
-              </div>
-            )}
-            {isInProgress && (
-              <div className="pt-3" onClick={(e) => e.stopPropagation()}>
-                <Button
-                  variant="default"
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={handleCompleteWork}
-                  disabled={isCompleting}
-                >
-                  {isCompleting ? "Completing Work..." : "Complete Work"}
-                </Button>
-              </div>
-            )}
+            <div className="pt-3" onClick={(e) => e.stopPropagation()}>
+              {renderActionButton()}
+            </div>
           </>
         )}
       </CardContent>
