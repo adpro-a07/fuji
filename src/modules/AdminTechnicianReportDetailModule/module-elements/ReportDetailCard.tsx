@@ -1,6 +1,6 @@
+import { Calendar, CheckCircle, ClipboardList, Clock, DollarSign, Hash, Stethoscope, User } from "lucide-react"
 import React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, CheckCircle, ClipboardList, Clock, DollarSign, Hash, Stethoscope, User } from "lucide-react"
 import { ReportResponseInterface } from "../interface"
 
 export default function ReportDetailCard({

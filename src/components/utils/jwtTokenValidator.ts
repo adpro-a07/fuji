@@ -1,6 +1,6 @@
-import { jwtVerify, importSPKI } from "jose"
-import { env } from "env.mjs"
+import { importSPKI, jwtVerify } from "jose"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
+import { env } from "env.mjs"
 
 export interface AccessTokenPayload {
   sub: string

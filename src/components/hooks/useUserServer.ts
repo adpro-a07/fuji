@@ -1,8 +1,8 @@
 import { getCookie } from "cookies-next/server"
 import { cookies } from "next/headers"
+import { UUID } from "crypto"
 import { AuthClient } from "@/lib/grpc/auth-service"
 import { verifyJwtRS256 } from "../utils/jwtTokenValidator"
-import { UUID } from "crypto"
 
 export default async function useUserServer() {
   const access = await getCookie("kilimanjaro-access", { cookies })

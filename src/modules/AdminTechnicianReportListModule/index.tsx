@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation"
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
-import { ReportResponseInterface } from "./interface"
-import MainTechnicianReportListSection from "./sections/MainTechnicianReportListSection"
 import { AuthClient } from "@/lib/grpc"
 import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
+import { ReportResponseInterface } from "./interface"
+import MainTechnicianReportListSection from "./sections/MainTechnicianReportListSection"
 
 export default async function TechnicianReportListModule() {
   try {
