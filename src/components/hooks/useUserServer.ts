@@ -1,6 +1,8 @@
 import { getCookie } from "cookies-next/server"
 import { cookies } from "next/headers"
 import { AuthClient } from "@/lib/grpc/auth-service"
+import { verifyJwtRS256 } from "../utils/jwtTokenValidator"
+import { UUID } from "crypto"
 
 export default async function useUserServer() {
   const access = await getCookie("kilimanjaro-access", { cookies })
@@ -9,14 +11,17 @@ export default async function useUserServer() {
   }
 
   try {
-    const authClient = AuthClient.getInstance()
-    const { data, error } = await authClient.validateToken(access)
+    const { payload, error: jwtError } = await verifyJwtRS256(access)
 
-    if (error) {
-      console.error("Auth error: ", error.message)
+    if (jwtError) {
+      console.error("Auth error: ", jwtError.message)
+      throw new Error("Invalid access token")
     }
 
-    if (!data || !data.userData) {
+    const authClient = AuthClient.getInstance()
+    const { data, error: lookupError } = await authClient.lookupUserById(payload?.userId as UUID)
+
+    if (lookupError || !data?.userData) {
       return null
     }
 
