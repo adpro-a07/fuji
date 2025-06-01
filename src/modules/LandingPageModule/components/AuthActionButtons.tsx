@@ -1,9 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { useAuthContext } from "@/components/contexts/AuthContext"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
+import { Button } from "@/components/ui/button"
 
 export default function AuthActionButtons() {
   const { user } = useAuthContext()

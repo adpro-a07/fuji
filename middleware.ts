@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { convertGrpcRoleToUserRole } from "@/components/utils/grpcConverter"
 import { UserRole } from "@/components/contexts/AuthContext/interface"
 import { AuthClient } from "@/lib/grpc"
+import { verifyJwtRS256 } from "@/components/utils/jwtTokenValidator"
 
 // Route configuration type supporting both static paths and regex patterns
 interface RouteConfig {
@@ -266,18 +266,16 @@ export async function middleware(request: NextRequest) {
     try {
       const verifyStartTime = performance.now()
 
-      const authClient = AuthClient.getInstance()
-      const { data, error } = await authClient.validateToken(accessToken)
+      const { payload, error } = await verifyJwtRS256(accessToken)
 
       const verifyDuration = performance.now() - verifyStartTime
 
-      if (!error && data && data.userData) {
-        const role = convertGrpcRoleToUserRole(data.userData?.identity?.role!)
+      if (!error && payload) {
+        const role = payload.role
 
         logger.debug("Access token verification successful", {
           role,
           duration: logger.formatDuration(verifyDuration),
-          status: data.status,
         })
 
         if (role && allowedRoles.includes(role)) {
@@ -293,7 +291,6 @@ export async function middleware(request: NextRequest) {
         }
       } else {
         logger.warn("Access token verification failed", {
-          status: data?.status,
           duration: logger.formatDuration(verifyDuration),
         })
       }

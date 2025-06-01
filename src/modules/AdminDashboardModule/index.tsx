@@ -1,10 +1,10 @@
 import React from "react"
 import { get } from "@/components/utils/customFetch/serverFetchClients"
+import { AuthClient } from "@/lib/grpc"
 import { CouponResponseInterface } from "@/modules/ManageCouponsPageModule/interface"
+import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 import { Alert, Report } from "./interface"
 import { MainAdminSection } from "./sections/MainAdminSection"
-import { AuthClient } from "@/lib/grpc"
-import { UserRole } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserRole"
 
 export default async function AdminDashboardModule() {
   const couponsRes = await get<CouponResponseInterface[]>("/api/v1/coupons", { isAuthorized: true })

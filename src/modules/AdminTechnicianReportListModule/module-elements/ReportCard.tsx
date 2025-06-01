@@ -1,6 +1,6 @@
+import { CheckCircle, FileText, User } from "lucide-react"
 import Link from "next/link"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, FileText, User } from "lucide-react"
 import { ReportResponseInterface } from "../interface"
 
 export default function ReportCard({

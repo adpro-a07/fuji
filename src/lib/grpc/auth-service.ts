@@ -10,8 +10,6 @@ import { ListUsersResponse } from "@/proto/generated/id/ac/ui/cs/advprog/kiliman
 import { RequestMetadata } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/RequestMetadata"
 import { TokenRefreshRequest } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/TokenRefreshRequest"
 import { TokenRefreshResponse } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/TokenRefreshResponse"
-import { TokenValidationRequest } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/TokenValidationRequest"
-import { TokenValidationResponse } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/TokenValidationResponse"
 import { UserIdentifier } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserIdentifier"
 import { UserLookupRequest } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserLookupRequest"
 import { UserLookupResponse } from "@/proto/generated/id/ac/ui/cs/advprog/kilimanjaro/auth/UserLookupResponse"
@@ -155,27 +153,6 @@ export class AuthClient {
   /**
    * ==================== AUTH SERVICE METHODS ====================
    */
-
-  /**
-   * Validate a user token
-   */
-  public async validateToken(token: string, includeUserData = true): Promise<ServiceResponse<TokenValidationResponse>> {
-    try {
-      await this.ensureAuthConnected()
-      const request: TokenValidationRequest = {
-        metadata: createRequestMetadata(),
-        token,
-        includeUserData,
-      }
-      type ValidateTokenFn = (request: TokenValidationRequest) => Promise<TokenValidationResponse>
-      const validateTokenCall = promisify(this.authClient.validateToken.bind(this.authClient)) as ValidateTokenFn
-      const data = await validateTokenCall(request)
-      return { data, error: null }
-    } catch (error) {
-      const grpcError = GrpcError.fromError(error, "Token validation failed")
-      return { data: null, error: grpcError }
-    }
-  }
 
   /**
    * Refresh an access token using a refresh token
