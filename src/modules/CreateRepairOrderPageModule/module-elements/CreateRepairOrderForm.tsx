@@ -134,7 +134,7 @@ export default function CreateRepairOrderForm({
                     name="itemCondition"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-medium">Item Condition</FormLabel>
+                        <FormLabel className="text-base font-medium">Kondisi Item</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g., good, fair, damaged" className="h-11" {...field} />
                         </FormControl>
